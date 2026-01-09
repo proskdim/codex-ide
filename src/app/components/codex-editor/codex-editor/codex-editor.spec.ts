@@ -1,4 +1,6 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { MarkdownModule } from 'ngx-markdown';
+import { MonacoEditorModule } from 'ngx-monaco-editor-v2';
 
 import { CodexEditor } from './codex-editor';
 
@@ -8,7 +10,7 @@ describe('CodexEditor', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [CodexEditor]
+      imports: [CodexEditor, MarkdownModule.forRoot(), MonacoEditorModule.forRoot()]
     })
     .compileComponents();
 

@@ -28,58 +28,72 @@
     </nav>
 
     <main class="flex-1 flex flex-col md:flex-row overflow-hidden relative z-10 gap-2">
-      <section
-        class="w-full md:w-[48%] flex flex-col border-r h-1/2 md:h-full bg-[#fafbfc] border border-[#e3e7ed] rounded-xl overflow-hidden"
-      >
-        <div class="flex bg-[#f7f8fa] border-b border-[#e3e7ed] text-sm font-semibold shrink-0 rounded-t-xl">
-          <span class="px-5 py-2 text-[#293146] flex items-center gap-2 tracking-wide"
-            >Description</span
+      <as-split direction="horizontal" class="w-full h-full">
+        <as-split-area [visible]="isDescVisible" [size]="48">
+          <section
+            class="w-full h-full flex flex-col bg-[#fafbfc] border border-[#e3e7ed] rounded-xl overflow-hidden"
           >
-        </div>
-        <div
-          class="flex-1 overflow-y-auto p-6 custom-scrollbar text-[#293146] leading-relaxed"
-        >
-          <markdown [data]="description" class="prose prose-sm max-w-none"></markdown>
-        </div>
-      </section>
-
-      <!-- Solution.ts section on top, Test cases section on bottom (LeetCode style) -->
-      <div class="flex flex-col gap-2 h-full w-full md:w-[52%]">
-        <!-- Solution.ts section (Top) -->
-        <section
-          class="w-full flex flex-col bg-white border border-[#e3e7ed] rounded-xl flex-2 overflow-hidden"
-        >
-          <div class="flex bg-[#f7f8fa] border-b border-[#e3e7ed] text-sm font-semibold shrink-0 rounded-t-xl">
-            <span class="px-5 py-2 text-[#293146] flex items-center gap-2 tracking-wide"
-              >solution.ts</span
+            <div class="flex bg-[#f7f8fa] border-b border-[#e3e7ed] text-sm font-semibold shrink-0 rounded-t-xl">
+              <span class="px-5 py-2 text-[#293146] flex items-center gap-2 tracking-wide"
+                >Description</span
+              >
+              <span class="px-5 py-2 text-[#293146] flex items-center gap-2 tracking-wide cursor-pointer" (click)="togglePanel('description')">
+                [{{ isDescVisible ? 'Collapse' : 'Expand' }}]
+              </span>
+            </div>
+            <div
+              class="flex-1 overflow-y-auto p-6 custom-scrollbar text-[#293146] leading-relaxed"
             >
-          </div>
-          <div class="flex-1 min-h-0">
-            <ngx-monaco-editor
-              [options]="editorOptions"
-              [(ngModel)]="code"
-              style="height: 100%"
-            ></ngx-monaco-editor>
-          </div>
-        </section>
-
-        <!-- Test cases section (Bottom) -->
-        <section
-          class="w-full flex flex-col bg-white border border-[#e3e7ed] rounded-xl flex-1 overflow-hidden"
-        >
-          <div class="flex bg-[#f7f8fa] border-b border-[#e3e7ed] text-sm font-semibold shrink-0 rounded-t-xl">
-            <span class="px-5 py-2 text-[#293146] flex items-center gap-2 tracking-wide"
-              >Test cases</span
-            >
-          </div>
-          <div
-            class="flex-1 min-h-0 py-3 px-4 text-[#293146] rounded-b-xl"
-          >
-            <!-- Test cases content goes here -->
-            test cases content
-          </div>
-        </section>
-      </div>
+              <markdown [data]="description" class="prose prose-sm max-w-none"></markdown>
+            </div>
+          </section>
+        </as-split-area>
+        <as-split-area [size]="52">
+          <as-split direction="vertical" class="h-full">
+            <as-split-area [visible]="isEditorVisible" [size]="70">
+              <section
+                class="w-full h-full flex flex-col bg-white border border-[#e3e7ed] rounded-xl overflow-hidden"
+              >
+                <div class="flex bg-[#f7f8fa] border-b border-[#e3e7ed] text-sm font-semibold shrink-0 rounded-t-xl">
+                  <span class="px-5 py-2 text-[#293146] flex items-center gap-2 tracking-wide"
+                    >solution.ts</span
+                  >
+                   <span class="px-5 py-2 text-[#293146] flex items-center gap-2 tracking-wide cursor-pointer" (click)="togglePanel('editor')">
+                    [{{ isEditorVisible ? 'Collapse' : 'Expand' }}]
+                  </span>
+                </div>
+                <div class="flex-1 min-h-0">
+                  <ngx-monaco-editor
+                    [options]="editorOptions"
+                    [(ngModel)]="code"
+                    style="height: 100%"
+                  ></ngx-monaco-editor>
+                </div>
+              </section>
+            </as-split-area>
+            <as-split-area [visible]="isTestVisible" [size]="30">
+              <section
+                class="w-full h-full flex flex-col bg-white border border-[#e3e7ed] rounded-xl overflow-hidden"
+              >
+                <div class="flex bg-[#f7f8fa] border-b border-[#e3e7ed] text-sm font-semibold shrink-0 rounded-t-xl">
+                  <span class="px-5 py-2 text-[#293146] flex items-center gap-2 tracking-wide"
+                    >Test cases</span
+                  >
+                   <span class="px-5 py-2 text-[#293146] flex items-center gap-2 tracking-wide cursor-pointer" (click)="togglePanel('test')">
+                    [{{ isTestVisible ? 'Collapse' : 'Expand' }}]
+                  </span>
+                </div>
+                <div
+                  class="flex-1 min-h-0 py-3 px-4 text-[#293146] rounded-b-xl"
+                >
+                  <!-- Test cases content goes here -->
+                  test cases content
+                </div>
+              </section>
+            </as-split-area>
+          </as-split>
+        </as-split-area>
+      </as-split>
     </main>
   </div>
 </div>
