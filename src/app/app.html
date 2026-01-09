@@ -1,9 +1,9 @@
 <h1>Codex IDE</h1>
 
-<button (click)="onShowCodexEditor()">Open editor</button>
+<button (click)="onShowEditor()">Open editor</button>
 
-@if (showCodexEditor()) {
-  <codex-editor></codex-editor>
-} @else {
-  <p>Editor is closed</p>
+@if (showEditor()) {
+  <codex-editor 
+  (showEditor)="onShowEditor()"
+  />
 }

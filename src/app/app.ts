@@ -11,9 +11,9 @@ import { CommonModule } from '@angular/common';
 export class App {
   protected readonly title = signal('codex-ide');
 
-  showCodexEditor = signal(true);
+  showEditor = signal(false);
 
-  onShowCodexEditor() {
-    this.showCodexEditor.set(!this.showCodexEditor());
+  onShowEditor() {
+    this.showEditor.set(!this.showEditor());
   }
 }

@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, output, signal } from '@angular/core';
 
 @Component({
   selector: 'codex-editor',
@@ -8,5 +8,9 @@ import { Component } from '@angular/core';
 })
 
 export class CodexEditor {
+  showEditor = output();
 
+  onCloseEditor() {
+    this.showEditor.emit();
+  }
 }
