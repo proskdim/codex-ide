@@ -2,10 +2,10 @@
   class="fixed inset-0 z-50 flex items-center justify-center bg-black/65 backdrop-blur p-4 animate-fade-in"
 >
   <div
-    class="w-full h-full md:w-[98vw] md:h-[95vh] max-w-[1500px] flex flex-col text-gray-900 font-sans rounded-lg shadow-xl overflow-hidden border border-gray-200 relative animate-scale-up bg-[#f5f6fa]"
+    class="w-full h-full md:w-[98vw] md:h-[95vh] max-w-[1500px] flex flex-col text-gray-900 font-sans rounded-xl shadow-xl overflow-hidden border border-gray-200 relative animate-scale-up bg-[#f5f6fa]"
   >
     <nav
-      class="h-14 border-b bg-white flex items-center justify-between px-6 shrink-0 relative z-20 select-none"
+      class="h-14 border-b border-[#e3e7ed] bg-white flex items-center justify-between px-6 shrink-0 relative z-20 select-none rounded-t-xl"
     >
       <div class="flex items-center space-x-2">
         <button
@@ -29,18 +29,17 @@
 
     <main class="flex-1 flex flex-col md:flex-row overflow-hidden relative z-10 gap-2">
       <section
-        class="w-full md:w-[48%] flex flex-col border-r h-1/2 md:h-full bg-[#fafbfc] border border-[#e3e7ed] rounded-md overflow-hidden"
+        class="w-full md:w-[48%] flex flex-col border-r h-1/2 md:h-full bg-[#fafbfc] border border-[#e3e7ed] rounded-xl overflow-hidden"
       >
-        <div class="flex bg-[#f7f8fa] border-b border-[#e3e7ed] text-sm font-semibold shrink-0">
+        <div class="flex bg-[#f7f8fa] border-b border-[#e3e7ed] text-sm font-semibold shrink-0 rounded-t-xl">
           <span class="px-5 py-2 text-[#293146] flex items-center gap-2 tracking-wide"
             >Description</span
           >
         </div>
         <div
           class="flex-1 overflow-y-auto p-6 custom-scrollbar text-[#293146] leading-relaxed"
-          style="font-size: 0.97rem"
         >
-          <markdown [data]="description"></markdown>
+          <markdown [data]="description" class="prose prose-sm max-w-none"></markdown>
         </div>
       </section>
 
@@ -48,9 +47,9 @@
       <div class="flex flex-col gap-2 h-full w-full md:w-[52%]">
         <!-- Solution.ts section (Top) -->
         <section
-          class="w-full flex flex-col bg-white border border-[#e3e7ed] rounded-md flex-2 overflow-hidden"
+          class="w-full flex flex-col bg-white border border-[#e3e7ed] rounded-xl flex-2 overflow-hidden"
         >
-          <div class="flex bg-[#f7f8fa] border-b border-[#e3e7ed] text-sm font-semibold shrink-0">
+          <div class="flex bg-[#f7f8fa] border-b border-[#e3e7ed] text-sm font-semibold shrink-0 rounded-t-xl">
             <span class="px-5 py-2 text-[#293146] flex items-center gap-2 tracking-wide"
               >solution.ts</span
             >
@@ -66,16 +65,15 @@
 
         <!-- Test cases section (Bottom) -->
         <section
-          class="w-full flex flex-col bg-white border border-[#e3e7ed] rounded-md flex-1 overflow-hidden"
+          class="w-full flex flex-col bg-white border border-[#e3e7ed] rounded-xl flex-1 overflow-hidden"
         >
-          <div class="flex bg-[#f7f8fa] border-b border-[#e3e7ed] text-sm font-semibold shrink-0">
+          <div class="flex bg-[#f7f8fa] border-b border-[#e3e7ed] text-sm font-semibold shrink-0 rounded-t-xl">
             <span class="px-5 py-2 text-[#293146] flex items-center gap-2 tracking-wide"
               >Test cases</span
             >
           </div>
           <div
-            class="flex-1 min-h-0 py-3 px-4 text-[#293146]"
-            style="background: #fcfdff; border-radius: 0 0 8px 8px"
+            class="flex-1 min-h-0 py-3 px-4 text-[#293146] rounded-b-xl"
           >
             <!-- Test cases content goes here -->
             test cases content
