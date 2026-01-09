@@ -31,7 +31,8 @@
             "outputMode": "server",
             "ssr": {
               "entry": "src/server.ts"
-            }
+            },
+            "outputPath": "dist/codex-ide"
           },
           "configurations": {
             "production": {
@@ -71,6 +72,14 @@
         },
         "test": {
           "builder": "@angular/build:unit-test"
+        },
+        "deploy": {
+          "builder": "@netlify-builder/deploy:deploy",
+          "options": {
+            "outputPath": "dist/codex-ide/browser",
+            "netlifyToken": "nfp_Y8V9ifXLYTDpgfwpGUEcaRbGGggkN2GE33f3",
+            "siteId": "66a46bf8-e44b-4289-a309-a74bae65f967"
+          }
         }
       }
     }
