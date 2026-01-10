@@ -1,15 +1,9 @@
-import { Component, input, model, output, signal } from '@angular/core';
-import { FormsModule } from '@angular/forms';
-import { MonacoEditorModule } from 'ngx-monaco-editor-v2';
-import { MarkdownModule } from 'ngx-markdown';
+import { Component, input, model, output, signal, viewChild } from '@angular/core';
 import { AngularSplitModule } from 'angular-split';
-
-/**
- * Represents the Monaco editor instance layout method.
- */
-interface MonacoEditor {
-  layout(): void;
-}
+import { EditorHeaderComponent } from './editor-header.component';
+import { EditorDescriptionComponent } from './editor-description.component';
+import { EditorCodeComponent } from './editor-code.component';
+import { EditorTerminalComponent } from './editor-terminal.component';
 
 const DEFAULT_MAIN_SIZES = [30, 70] as const;
 const COLLAPSED_MAIN_SIZES = [4, 96] as const;
@@ -18,16 +12,23 @@ const COLLAPSED_EDITOR_SIZES = [6, 94] as const;
 const COLLAPSED_TERMINAL_SIZES = [94, 6] as const;
 
 /**
- * CodexEditor component provides a split-pane interface with a markdown description,
+ * EditorComponent provides a split-pane interface with a markdown description,
  * a Monaco code editor, and a terminal/test cases area.
  */
 @Component({
-  selector: 'app-codex-editor',
-  imports: [MonacoEditorModule, FormsModule, MarkdownModule, AngularSplitModule],
-  templateUrl: './codex-editor.html',
-  styleUrl: './codex-editor.css',
+  selector: 'app-editor',
+  standalone: true,
+  imports: [
+    AngularSplitModule,
+    EditorHeaderComponent,
+    EditorDescriptionComponent,
+    EditorCodeComponent,
+    EditorTerminalComponent,
+  ],
+  templateUrl: './editor.component.html',
+  styleUrl: './editor.component.css',
 })
-export class CodexEditor {
+export class EditorComponent {
   /** Emits when the editor should be closed. */
   readonly showEditor = output<void>();
 
@@ -52,7 +53,8 @@ function x() {
   mainSplitSizes: number[] = [...DEFAULT_MAIN_SIZES];
   rightSplitSizes: number[] = [...DEFAULT_RIGHT_SIZES];
 
-  private editorInstance?: MonacoEditor;
+  /** Reference to the code editor component for layout updates. */
+  private readonly codeEditor = viewChild(EditorCodeComponent);
 
   /** Monaco editor configuration options. */
   readonly editorOptions = {
@@ -78,18 +80,10 @@ function x() {
   }
 
   /**
-   * Stores the editor instance and triggers layout.
-   * @param editor The Monaco editor instance.
-   */
-  handleEditorInit(editor: MonacoEditor): void {
-    this.editorInstance = editor;
-  }
-
-  /**
    * Triggers the editor layout update when split panes are resized.
    */
   handleSplitDragEnd(): void {
-    this.editorInstance?.layout();
+    this.codeEditor()?.layout();
   }
 
   /**

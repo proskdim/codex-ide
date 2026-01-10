@@ -2,8 +2,8 @@
 
 <button (click)="onShowEditor()">Open editor</button>
 
-@if (showEditor()) {
-  <app-codex-editor
+@if (isEditorVisible()) {
+  <app-editor
   (showEditor)="onShowEditor()"
   />
 }

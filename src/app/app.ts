@@ -1,19 +1,21 @@
 import { Component, signal } from '@angular/core';
-import { CodexEditor } from './components/codex-editor/codex-editor/codex-editor';
+import { EditorComponent } from './components/codex-editor/codex-editor/editor.component';
 import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-root',
-  imports: [CommonModule, CodexEditor],
+  imports: [CommonModule, EditorComponent],
   templateUrl: './app.html',
-  styleUrl: './app.css'
+  styleUrl: './app.css',
 })
 export class App {
-  protected readonly title = signal('codex-ide');
+  readonly isEditorVisible = signal(true);
 
-  showEditor = signal(false);
+  onShowEditor(): void {
+    this.isEditorVisible.update((visible) => !visible);
+  }
 
-  onShowEditor() {
-    this.showEditor.set(!this.showEditor());
+  toggleEditor(): void {
+    this.isEditorVisible.update((visible) => !visible);
   }
 }
