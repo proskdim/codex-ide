@@ -1,0 +1,43 @@
+:host {
+  display: block;
+  height: 100%;
+}
+
+/* Customizing angular-split gutters */
+::ng-deep .as-split-gutter {
+  background-color: transparent !important;
+  transition: background-color 0.2s;
+}
+
+::ng-deep .as-split-gutter:hover {
+  background-color: #e3e7ed !important;
+}
+
+/* Ensure the split component takes full height */
+as-split {
+  height: 100%;
+  background-color: transparent;
+}
+
+/* Custom scrollbar for the description and other areas */
+.custom-scrollbar::-webkit-scrollbar {
+  width: 6px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb {
+  background: #e3e7ed;
+  border-radius: 10px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb:hover {
+  background: #d1d5db;
+}
+
+/* Hide monaco editor when collapsed to prevent layout issues */
+.hidden {
+  display: none !important;
+}
