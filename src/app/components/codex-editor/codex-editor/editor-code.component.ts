@@ -1,4 +1,5 @@
-import { Component, input, model, output } from '@angular/core';
+import { Component, PLATFORM_ID, inject, input, model, output } from '@angular/core';
+import { isPlatformBrowser } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { MonacoEditorModule } from 'ngx-monaco-editor-v2';
 
@@ -56,6 +57,7 @@ interface MonacoEditorOptions {
         </button>
       </div>
       <div class="min-h-0 flex-1" [class.hidden]="isCollapsed()">
+        @if (isBrowser) {
         <ngx-monaco-editor
           [options]="options()"
           [ngModel]="code()"
@@ -63,6 +65,7 @@ interface MonacoEditorOptions {
           (onInit)="handleEditorInit($event)"
           style="height: 100%"
         ></ngx-monaco-editor>
+        }
       </div>
     </section>
   `,
@@ -79,6 +82,9 @@ export class EditorCodeComponent {
 
   /** Emits when the collapse toggle is clicked. */
   readonly toggleCollapse = output<void>();
+
+  /** Whether the component is running in a browser environment. */
+  protected readonly isBrowser = isPlatformBrowser(inject(PLATFORM_ID));
 
   private editorInstance?: MonacoEditor;
 
