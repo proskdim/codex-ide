@@ -36,13 +36,18 @@
       >
         <!-- Description Section -->
         <as-split-area [size]="mainSplitSizes[0]" [minSize]="4">
-          <section class="flex flex-col h-full bg-[#fafbfc] border border-[#e3e7ed] rounded-xl overflow-hidden">
+          <section
+            class="flex flex-col h-full bg-[#fafbfc] border border-[#e3e7ed] rounded-xl overflow-hidden"
+          >
             <div
               class="flex bg-[#f7f8fa] border-b border-[#e3e7ed] text-sm font-semibold shrink-0 items-center pr-2"
               [class.justify-between]="!isDescriptionCollapsed()"
               [class.justify-center]="isDescriptionCollapsed()"
             >
-              <span class="px-5 py-2 text-[#293146] flex items-center gap-2 tracking-wide" *ngIf="!isDescriptionCollapsed()">
+              <span
+                class="px-5 py-2 text-[#293146] flex items-center gap-2 tracking-wide"
+                *ngIf="!isDescriptionCollapsed()"
+              >
                 Description
               </span>
               <button
@@ -60,8 +65,11 @@
             >
               <markdown [data]="description" class="prose prose-sm max-w-none"></markdown>
             </div>
-            <div *ngIf="isDescriptionCollapsed()" class="flex-1 flex items-center justify-center bg-gray-50">
-               <!-- Vertical text or just empty space -->
+            <div
+              *ngIf="isDescriptionCollapsed()"
+              class="flex-1 flex items-center justify-center bg-gray-50"
+            >
+              <!-- Vertical text or just empty space -->
             </div>
           </section>
         </as-split-area>
@@ -76,13 +84,18 @@
           >
             <!-- Editor Section -->
             <as-split-area [size]="rightSplitSizes[0]" [minSize]="6">
-              <section class="flex flex-col h-full bg-white border border-[#e3e7ed] rounded-xl overflow-hidden">
+              <section
+                class="flex flex-col h-full bg-white border border-[#e3e7ed] rounded-xl overflow-hidden"
+              >
                 <div
                   class="flex bg-[#f7f8fa] border-b border-[#e3e7ed] text-sm font-semibold shrink-0 items-center pr-2"
                   [class.justify-between]="!isEditorCollapsed()"
                   [class.justify-center]="isEditorCollapsed()"
                 >
-                  <span class="px-5 py-2 text-[#293146] flex items-center gap-2 tracking-wide" *ngIf="!isEditorCollapsed()">
+                  <span
+                    class="px-5 py-2 text-[#293146] flex items-center gap-2 tracking-wide"
+                    *ngIf="!isEditorCollapsed()"
+                  >
                     solution.ts
                   </span>
                   <button
@@ -106,13 +119,18 @@
 
             <!-- Terminal / Test cases Section -->
             <as-split-area [size]="rightSplitSizes[1]" [minSize]="6">
-              <section class="flex flex-col h-full bg-white border border-[#e3e7ed] rounded-xl overflow-hidden">
+              <section
+                class="flex flex-col h-full bg-white border border-[#e3e7ed] rounded-xl overflow-hidden"
+              >
                 <div
                   class="flex bg-[#f7f8fa] border-b border-[#e3e7ed] text-sm font-semibold shrink-0 items-center pr-2"
                   [class.justify-between]="!isTerminalCollapsed()"
                   [class.justify-center]="isTerminalCollapsed()"
                 >
-                  <span class="px-5 py-2 text-[#293146] flex items-center gap-2 tracking-wide" *ngIf="!isTerminalCollapsed()">
+                  <span
+                    class="px-5 py-2 text-[#293146] flex items-center gap-2 tracking-wide"
+                    *ngIf="!isTerminalCollapsed()"
+                  >
                     Test cases
                   </span>
                   <button
