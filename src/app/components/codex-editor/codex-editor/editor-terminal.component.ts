@@ -13,10 +13,8 @@ import { Component, input, output } from '@angular/core';
     >
       <div
         class="flex shrink-0 items-center border-b border-base-300 bg-base-200/50 text-sm font-bold"
-        [class.justify-between]="!isCollapsed()"
-        [class.justify-center]="isCollapsed()"
+        class="flex shrink-0 items-center justify-between border-b border-base-300 bg-base-200/50 text-sm font-bold"
       >
-        @if (!isCollapsed()) {
         <div role="tablist" class="tabs tabs-bordered tabs-sm px-2">
           <input
             type="radio"
@@ -34,7 +32,6 @@ import { Component, input, output } from '@angular/core';
             aria-label="Result"
           />
         </div>
-        }
         <button
           (click)="toggleCollapse.emit()"
           class="btn btn-ghost btn-xs text-base-content/50"
