@@ -12,7 +12,7 @@
     <main class="relative z-10 flex-1 overflow-hidden p-2">
       <as-split
         direction="horizontal"
-        (dragEnd)="handleSplitDragEnd('main', $event)"
+        (dragEnd)="handleSplitDrag('main', $event)"
         [gutterSize]="8"
       >
         <!-- Description Section -->
@@ -28,7 +28,7 @@
         <as-split-area [size]="mainSplitSizes()[1]">
           <as-split
             direction="vertical"
-            (dragEnd)="handleSplitDragEnd('right', $event)"
+            (dragEnd)="handleSplitDrag('right', $event)"
             [gutterSize]="8"
           >
             <!-- Editor Section -->

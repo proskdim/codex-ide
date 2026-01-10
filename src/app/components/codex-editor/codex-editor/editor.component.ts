@@ -5,9 +5,9 @@ import { EditorDescriptionComponent } from './editor-description.component';
 import { EditorCodeComponent } from './editor-code.component';
 import { EditorTerminalComponent } from './editor-terminal.component';
 
-const DEFAULT_MAIN_SIZES = [30, 70] as const;
+const DEFAULT_MAIN_SIZES = [45, 55] as const;
+const DEFAULT_EDITOR_SIZES = [60, 40] as const;
 const COLLAPSED_MAIN_SIZES = [4, 96] as const;
-const DEFAULT_RIGHT_SIZES = [60, 40] as const;
 const COLLAPSED_EDITOR_SIZES = [6, 94] as const;
 const COLLAPSED_TERMINAL_SIZES = [94, 6] as const;
 
@@ -46,7 +46,7 @@ function x() {
 
   /** Split sizes (percentages). */
   readonly mainSplitSizes = signal<number[]>([...DEFAULT_MAIN_SIZES]);
-  readonly rightSplitSizes = signal<number[]>([...DEFAULT_RIGHT_SIZES]);
+  readonly rightSplitSizes = signal<number[]>([...DEFAULT_EDITOR_SIZES]);
 
   /** State for collapsing sections, derived from split sizes. */
   readonly isDescriptionCollapsed = computed(() => this.mainSplitSizes()[0] <= COLLAPSED_MAIN_SIZES[0] + 0.5);
@@ -84,12 +84,12 @@ function x() {
    */
   /**
    * Triggers the editor layout update when split panes are resized.
-   * Synchronizes the split sizes signals.
+   * Synchronizes the split sizes signals in real-time.
    *
    * @param type The split area being resized ('main' or 'right').
    * @param event The drag event containing the new sizes.
    */
-  handleSplitDragEnd(
+  handleSplitDrag(
     type: 'main' | 'right',
     { sizes }: { sizes: (number | '*')[] }
   ): void {
@@ -117,7 +117,7 @@ function x() {
   toggleEditor(): void {
     this.rightSplitSizes.set(
       this.isEditorCollapsed()
-        ? [...DEFAULT_RIGHT_SIZES]
+        ? [...DEFAULT_EDITOR_SIZES]
         : [...COLLAPSED_EDITOR_SIZES]
     );
     this.codeEditor()?.layout();
@@ -129,7 +129,7 @@ function x() {
   toggleTerminal(): void {
     this.rightSplitSizes.set(
       this.isTerminalCollapsed()
-        ? [...DEFAULT_RIGHT_SIZES]
+        ? [...DEFAULT_EDITOR_SIZES]
         : [...COLLAPSED_TERMINAL_SIZES]
     );
     this.codeEditor()?.layout();
