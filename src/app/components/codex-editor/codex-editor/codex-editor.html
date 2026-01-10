@@ -28,17 +28,27 @@
     </nav>
 
     <main class="flex-1 overflow-hidden relative z-10 p-2">
-      <as-split direction="horizontal" (dragEnd)="onSplitDragEnd()" [gutterSize]="8">
+      <as-split
+        direction="horizontal"
+        (dragEnd)="onSplitDragEnd()"
+        [gutterSize]="8"
+        [disabled]="isDescriptionCollapsed()"
+      >
         <!-- Description Section -->
         <as-split-area [size]="mainSplitSizes[0]" [minSize]="4">
           <section class="flex flex-col h-full bg-[#fafbfc] border border-[#e3e7ed] rounded-xl overflow-hidden">
-            <div class="flex bg-[#f7f8fa] border-b border-[#e3e7ed] text-sm font-semibold shrink-0 items-center justify-between pr-2">
-              <span class="px-5 py-2 text-[#293146] flex items-center gap-2 tracking-wide" [class.hidden]="isDescriptionCollapsed()">
+            <div
+              class="flex bg-[#f7f8fa] border-b border-[#e3e7ed] text-sm font-semibold shrink-0 items-center pr-2"
+              [class.justify-between]="!isDescriptionCollapsed()"
+              [class.justify-center]="isDescriptionCollapsed()"
+            >
+              <span class="px-5 py-2 text-[#293146] flex items-center gap-2 tracking-wide" *ngIf="!isDescriptionCollapsed()">
                 Description
               </span>
               <button
                 (click)="toggleDescription()"
                 class="p-1 hover:bg-gray-200 rounded transition-colors cursor-pointer text-gray-500"
+                [class.mt-2]="isDescriptionCollapsed()"
                 [title]="isDescriptionCollapsed() ? 'Expand' : 'Collapse'"
               >
                 <span class="text-lg">{{ isDescriptionCollapsed() ? '→' : '←' }}</span>
@@ -58,12 +68,21 @@
 
         <!-- Editor and Terminal Section -->
         <as-split-area [size]="mainSplitSizes[1]">
-          <as-split direction="vertical" (dragEnd)="onSplitDragEnd()" [gutterSize]="8">
+          <as-split
+            direction="vertical"
+            (dragEnd)="onSplitDragEnd()"
+            [gutterSize]="8"
+            [disabled]="isEditorCollapsed() || isTerminalCollapsed()"
+          >
             <!-- Editor Section -->
             <as-split-area [size]="rightSplitSizes[0]" [minSize]="6">
               <section class="flex flex-col h-full bg-white border border-[#e3e7ed] rounded-xl overflow-hidden">
-                <div class="flex bg-[#f7f8fa] border-b border-[#e3e7ed] text-sm font-semibold shrink-0 items-center justify-between pr-2">
-                  <span class="px-5 py-2 text-[#293146] flex items-center gap-2 tracking-wide" [class.hidden]="isEditorCollapsed()">
+                <div
+                  class="flex bg-[#f7f8fa] border-b border-[#e3e7ed] text-sm font-semibold shrink-0 items-center pr-2"
+                  [class.justify-between]="!isEditorCollapsed()"
+                  [class.justify-center]="isEditorCollapsed()"
+                >
+                  <span class="px-5 py-2 text-[#293146] flex items-center gap-2 tracking-wide" *ngIf="!isEditorCollapsed()">
                     solution.ts
                   </span>
                   <button
@@ -88,8 +107,12 @@
             <!-- Terminal / Test cases Section -->
             <as-split-area [size]="rightSplitSizes[1]" [minSize]="6">
               <section class="flex flex-col h-full bg-white border border-[#e3e7ed] rounded-xl overflow-hidden">
-                <div class="flex bg-[#f7f8fa] border-b border-[#e3e7ed] text-sm font-semibold shrink-0 items-center justify-between pr-2">
-                  <span class="px-5 py-2 text-[#293146] flex items-center gap-2 tracking-wide" [class.hidden]="isTerminalCollapsed()">
+                <div
+                  class="flex bg-[#f7f8fa] border-b border-[#e3e7ed] text-sm font-semibold shrink-0 items-center pr-2"
+                  [class.justify-between]="!isTerminalCollapsed()"
+                  [class.justify-center]="isTerminalCollapsed()"
+                >
+                  <span class="px-5 py-2 text-[#293146] flex items-center gap-2 tracking-wide" *ngIf="!isTerminalCollapsed()">
                     Test cases
                   </span>
                   <button
