@@ -32,9 +32,13 @@ export class CodexEditor {
   readonly showEditor = output<void>();
 
   /** Markdown big description content. */
-  readonly description = input<string>(
-    `# Description\nThis is a description of the code example. \n\n## Subtitle\nThis is a subtitle of the description. \n\n### Subsubtitle\nThis is a subsubtitle of the description. \n\n- List item 1\n- List item 2\n- List item 3`
-  );
+  readonly description = input<string>(`
+\`\`\`typescript
+function x() {
+  console.log("Hello world!");
+}
+\`\`\`
+`);
 
   /** Code content in the editor. */
   readonly code = model<string>('function x() {\n\tconsole.log("Hello world!");\n}');

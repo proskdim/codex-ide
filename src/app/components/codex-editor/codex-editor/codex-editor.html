@@ -17,7 +17,9 @@
       </div>
 
       <div class="navbar-center">
-        <span class="text-[10px] font-bold tracking-[0.2em] opacity-40 uppercase">Codex Editor</span>
+        <span class="text-[10px] font-bold tracking-[0.2em] opacity-40 uppercase"
+          >Codex Editor</span
+        >
       </div>
 
       <div class="navbar-end">
@@ -65,7 +67,7 @@
 
             @if (!isDescriptionCollapsed()) {
             <div class="card-body custom-scrollbar overflow-y-auto p-6 leading-relaxed">
-              <markdown [data]="description()" class="prose prose-sm max-w-none"></markdown>
+              <markdown lineNumbers lineHighlight clipboard [data]="description()" class="prose prose-sm max-w-none" />
             </div>
             } @else {
             <div class="flex flex-1 items-center justify-center bg-base-200/30">

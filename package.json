@@ -33,12 +33,14 @@
     "@angular/router": "^21.0.0",
     "@angular/ssr": "^21.0.5",
     "angular-split": "^20.0.0",
+    "clipboard": "^2.0.11",
     "daisyui": "^5.5.14",
     "express": "^5.1.0",
     "marked": "^17.0.1",
     "monaco-editor": "^0.55.1",
     "ngx-markdown": "^21.0.1",
     "ngx-monaco-editor-v2": "^20.3.0",
+    "prismjs": "^1.30.0",
     "rxjs": "~7.8.0",
     "tslib": "^2.3.0"
   },
@@ -64,5 +66,16 @@
     "typescript": "~5.9.2",
     "typescript-eslint": "^8.52.0",
     "vitest": "^4.0.8"
+  },
+  "overrides": {
+    "@angular/common": "$@angular/common",
+    "@angular/compiler": "$@angular/compiler",
+    "@angular/core": "$@angular/core",
+    "@angular/forms": "$@angular/forms",
+    "@angular/platform-browser": "$@angular/platform-browser",
+    "@angular/platform-server": "$@angular/platform-server",
+    "@angular/router": "$@angular/router",
+    "monaco-editor": "$monaco-editor",
+    "rxjs": "$rxjs"
   }
 }
