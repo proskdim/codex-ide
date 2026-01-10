@@ -24,7 +24,7 @@ as-split[direction="horizontal"] > ::ng-deep .as-split-gutter::before {
 }
 
 as-split[direction="horizontal"] > ::ng-deep .as-split-gutter:hover::before {
-  background-color: #d1d5db;
+  background-color: var(--color-base-300);
   width: 4px;
 }
 
@@ -43,7 +43,7 @@ as-split[direction="vertical"] > ::ng-deep .as-split-gutter::before {
 }
 
 as-split[direction="vertical"] > ::ng-deep .as-split-gutter:hover::before {
-  background-color: #d1d5db;
+  background-color: var(--color-base-300);
   height: 4px;
 }
 
@@ -63,12 +63,13 @@ as-split {
 }
 
 .custom-scrollbar::-webkit-scrollbar-thumb {
-  background: #e3e7ed;
+  background: var(--color-base-300);
   border-radius: 10px;
 }
 
 .custom-scrollbar::-webkit-scrollbar-thumb:hover {
-  background: #d1d5db;
+  background: var(--color-base-content);
+  opacity: 0.2;
 }
 
 /* Hide monaco editor when collapsed to prevent layout issues */

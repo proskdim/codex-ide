@@ -1,27 +1,20 @@
-<div
-  class="fixed inset-0 z-50 flex items-center justify-center bg-black/65 backdrop-blur p-4 animate-fade-in"
->
+<div class="modal modal-open backdrop-blur-sm animate-fade-in">
   <div
-    class="w-full h-full md:w-[98vw] md:h-[95vh] max-w-[1500px] flex flex-col text-gray-900 font-sans rounded-xl shadow-xl overflow-hidden border border-gray-200 relative animate-scale-up bg-[#f5f6fa]"
+    class="modal-box w-full h-full md:w-[98vw] md:h-[95vh] max-w-[1500px] p-0 flex flex-col bg-base-200 rounded-xl shadow-2xl overflow-hidden border border-base-300 relative animate-scale-up"
   >
-    <nav
-      class="h-14 border-b border-[#e3e7ed] bg-white flex items-center justify-between px-6 shrink-0 relative z-20 select-none rounded-t-xl"
-    >
-      <div class="flex items-center space-x-2">
+    <nav class="navbar bg-base-100 border-b border-base-300 px-4 min-h-14 shrink-0 z-20 select-none">
+      <div class="flex-1">
         <button
           (click)="executeCloseEditor()"
           aria-label="Close editor"
-          class="flex items-center text-[#999faf] hover:text-white hover:bg-red-500 px-2 py-1 rounded transition-all cursor-pointer"
+          class="btn btn-ghost btn-sm text-base-content/50 hover:bg-error hover:text-error-content"
         >
-          <span>X</span>
+          <span class="text-lg">✕</span>
         </button>
       </div>
 
-      <div class="flex items-center">
-        <button
-          (click)="executeSubmitCode()"
-          class="bg-[#21be72] hover:bg-[#23ce7f] text-white px-6 py-2 rounded font-semibold text-sm shadow transition-all"
-        >
+      <div class="flex-none">
+        <button (click)="executeSubmitCode()" class="btn btn-success btn-sm px-6 font-bold shadow-sm">
           Submit
         </button>
       </div>
@@ -37,21 +30,21 @@
         <!-- Description Section -->
         <as-split-area [size]="mainSplitSizes[0]" [minSize]="4">
           <section
-            class="flex flex-col h-full bg-[#fafbfc] border border-[#e3e7ed] rounded-xl overflow-hidden"
+            class="card card-compact bg-base-100 border border-base-300 h-full rounded-xl overflow-hidden"
           >
             <div
-              class="flex bg-[#f7f8fa] border-b border-[#e3e7ed] text-sm font-semibold shrink-0 items-center pr-2"
+              class="flex bg-base-200/50 border-b border-base-300 text-sm font-bold shrink-0 items-center pr-2"
               [class.justify-between]="!isDescriptionCollapsed()"
               [class.justify-center]="isDescriptionCollapsed()"
             >
               @if (!isDescriptionCollapsed()) {
-                <span class="px-5 py-2 text-[#293146] flex items-center gap-2 tracking-wide">
+                <span class="px-5 py-2 opacity-70 flex items-center gap-2 tracking-wide">
                   Description
                 </span>
               }
               <button
                 (click)="toggleDescription()"
-                class="p-1 hover:bg-gray-200 rounded transition-colors cursor-pointer text-gray-500"
+                class="btn btn-ghost btn-xs text-base-content/50"
                 [class.mt-2]="isDescriptionCollapsed()"
                 [title]="isDescriptionCollapsed() ? 'Expand' : 'Collapse'"
               >
@@ -59,11 +52,11 @@
               </button>
             </div>
             @if (!isDescriptionCollapsed()) {
-              <div class="flex-1 overflow-y-auto p-6 custom-scrollbar text-[#293146] leading-relaxed">
+              <div class="card-body p-6 overflow-y-auto custom-scrollbar leading-relaxed">
                 <markdown [data]="description()" class="prose prose-sm max-w-none"></markdown>
               </div>
             } @else {
-              <div class="flex-1 flex items-center justify-center bg-gray-50">
+              <div class="flex-1 flex items-center justify-center bg-base-200/30">
                 <!-- Vertical text or just empty space -->
               </div>
             }
@@ -81,21 +74,21 @@
             <!-- Editor Section -->
             <as-split-area [size]="rightSplitSizes[0]" [minSize]="6">
               <section
-                class="flex flex-col h-full bg-white border border-[#e3e7ed] rounded-xl overflow-hidden"
+                class="card card-compact bg-base-100 border border-base-300 h-full rounded-xl overflow-hidden"
               >
                 <div
-                  class="flex bg-[#f7f8fa] border-b border-[#e3e7ed] text-sm font-semibold shrink-0 items-center pr-2"
+                  class="flex bg-base-200/50 border-b border-base-300 text-sm font-bold shrink-0 items-center pr-2"
                   [class.justify-between]="!isEditorCollapsed()"
                   [class.justify-center]="isEditorCollapsed()"
                 >
                   @if (!isEditorCollapsed()) {
-                    <span class="px-5 py-2 text-[#293146] flex items-center gap-2 tracking-wide">
+                    <span class="px-5 py-2 opacity-70 flex items-center gap-2 tracking-wide">
                       solution.ts
                     </span>
                   }
                   <button
                     (click)="toggleEditor()"
-                    class="p-1 hover:bg-gray-200 rounded transition-colors cursor-pointer text-gray-500"
+                    class="btn btn-ghost btn-xs text-base-content/50"
                     [title]="isEditorCollapsed() ? 'Expand' : 'Collapse'"
                   >
                     <span class="text-lg">{{ isEditorCollapsed() ? '↓' : '↑' }}</span>
@@ -116,30 +109,28 @@
             <!-- Terminal / Test cases Section -->
             <as-split-area [size]="rightSplitSizes[1]" [minSize]="6">
               <section
-                class="flex flex-col h-full bg-white border border-[#e3e7ed] rounded-xl overflow-hidden"
+                class="card card-compact bg-base-100 border border-base-300 h-full rounded-xl overflow-hidden"
               >
                 <div
-                  class="flex bg-[#f7f8fa] border-b border-[#e3e7ed] text-sm font-semibold shrink-0 items-center pr-2"
+                  class="flex bg-base-200/50 border-b border-base-300 text-sm font-bold shrink-0 items-center pr-2"
                   [class.justify-between]="!isTerminalCollapsed()"
                   [class.justify-center]="isTerminalCollapsed()"
                 >
                   @if (!isTerminalCollapsed()) {
-                    <span class="px-5 py-2 text-[#293146] flex items-center gap-2 tracking-wide">
+                    <span class="px-5 py-2 opacity-70 flex items-center gap-2 tracking-wide">
                       Test cases
                     </span>
                   }
                   <button
                     (click)="toggleTerminal()"
-                    class="p-1 hover:bg-gray-200 rounded transition-colors cursor-pointer text-gray-500"
+                    class="btn btn-ghost btn-xs text-base-content/50"
                     [title]="isTerminalCollapsed() ? 'Expand' : 'Collapse'"
                   >
                     <span class="text-lg">{{ isTerminalCollapsed() ? '↑' : '↓' }}</span>
                   </button>
                 </div>
                 @if (!isTerminalCollapsed()) {
-                  <div class="flex-1 min-h-0 py-3 px-4 text-[#293146] rounded-b-xl">
-                    test cases content
-                  </div>
+                  <div class="card-body p-4 opacity-80">test cases content</div>
                 }
               </section>
             </as-split-area>
