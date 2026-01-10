@@ -19,6 +19,7 @@ interface MonacoEditorOptions {
   minimap: { enabled: boolean };
   fontSize: number;
   automaticLayout: boolean;
+  fontFamily: string;
 }
 
 /**

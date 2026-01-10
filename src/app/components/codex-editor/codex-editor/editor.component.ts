@@ -89,6 +89,7 @@ function x() {
     minimap: { enabled: false },
     fontSize: 14,
     automaticLayout: true,
+    fontFamily: 'JetBrains Mono, monospace',
   };
 
   /**
