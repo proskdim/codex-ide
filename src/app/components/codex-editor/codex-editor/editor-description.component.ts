@@ -1,5 +1,7 @@
-import { Component, input, output } from '@angular/core';
+import { Component, input, output, inject, PLATFORM_ID } from '@angular/core';
+import { isPlatformBrowser } from '@angular/common';
 import { MarkdownModule } from 'ngx-markdown';
+import ClipboardJS from 'clipboard';
 
 /**
  * Description component for the Codex Editor.
@@ -68,6 +70,12 @@ import { MarkdownModule } from 'ngx-markdown';
   `,
 })
 export class EditorDescriptionComponent {
+  constructor() {
+    if (isPlatformBrowser(inject(PLATFORM_ID))) {
+      (window as unknown as { ClipboardJS: typeof ClipboardJS }).ClipboardJS = ClipboardJS;
+    }
+  }
+
   /** Markdown content to display. */
   readonly content = input.required<string>();
 

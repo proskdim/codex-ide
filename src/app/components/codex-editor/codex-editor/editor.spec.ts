@@ -1,16 +1,22 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { CodexEditorComponent } from './editor.component';
+import { EditorComponent } from './editor.component';
+import { provideMarkdown } from 'ngx-markdown';
+import { provideMonacoEditor } from 'ngx-monaco-editor-v2';
 
-describe('CodexEditorComponent', () => {
-  let component: CodexEditorComponent;
-  let fixture: ComponentFixture<CodexEditorComponent>;
+describe('EditorComponent', () => {
+  let component: EditorComponent;
+  let fixture: ComponentFixture<EditorComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [CodexEditorComponent],
+      imports: [EditorComponent],
+      providers: [
+        provideMarkdown(),
+        provideMonacoEditor(),
+      ],
     }).compileComponents();
 
-    fixture = TestBed.createComponent(CodexEditorComponent);
+    fixture = TestBed.createComponent(EditorComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });
