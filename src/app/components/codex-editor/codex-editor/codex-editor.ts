@@ -22,7 +22,7 @@ const COLLAPSED_TERMINAL_SIZES = [94, 6] as const;
  * a Monaco code editor, and a terminal/test cases area.
  */
 @Component({
-  selector: 'codex-editor',
+  selector: 'app-codex-editor',
   imports: [MonacoEditorModule, FormsModule, MarkdownModule, AngularSplitModule],
   templateUrl: './codex-editor.html',
   styleUrl: './codex-editor.css',
