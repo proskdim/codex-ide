@@ -1,92 +1,121 @@
-import { Component, output, signal, ViewChild } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { Component, input, model, output, signal } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { MonacoEditorModule } from 'ngx-monaco-editor-v2';
 import { MarkdownModule } from 'ngx-markdown';
 import { AngularSplitModule } from 'angular-split';
 
+/**
+ * Represents the Monaco editor instance layout method.
+ */
+interface MonacoEditor {
+  layout(): void;
+}
+
+const DEFAULT_MAIN_SIZES = [30, 70] as const;
+const COLLAPSED_MAIN_SIZES = [4, 96] as const;
+const DEFAULT_RIGHT_SIZES = [60, 40] as const;
+const COLLAPSED_EDITOR_SIZES = [6, 94] as const;
+const COLLAPSED_TERMINAL_SIZES = [94, 6] as const;
+
+/**
+ * CodexEditor component provides a split-pane interface with a markdown description,
+ * a Monaco code editor, and a terminal/test cases area.
+ */
 @Component({
   selector: 'codex-editor',
-  imports: [CommonModule, MonacoEditorModule, FormsModule, MarkdownModule, AngularSplitModule],
+  imports: [MonacoEditorModule, FormsModule, MarkdownModule, AngularSplitModule],
   templateUrl: './codex-editor.html',
   styleUrl: './codex-editor.css',
 })
 export class CodexEditor {
-  showEditor = output();
+  /** Emits when the editor should be closed. */
+  readonly showEditor = output<void>();
 
-  // State for collapsing sections
-  isDescriptionCollapsed = signal(false);
-  isEditorCollapsed = signal(false);
-  isTerminalCollapsed = signal(false);
+  /** Markdown description content. */
+  readonly description = input<string>('# Description\n\nThis is a description of the code example.');
 
-  // Split sizes (percentages)
-  // Initial: Description 30%, Editor+Terminal 70%
-  // Inside right: Editor 60%, Terminal 40%
-  mainSplitSizes = [30, 70];
-  rightSplitSizes = [60, 40];
+  /** Code content in the editor. */
+  readonly code = model<string>('function x() {\n\tconsole.log("Hello world!");\n}');
 
-  editorInstance: any;
+  /** State for collapsing sections. */
+  readonly isDescriptionCollapsed = signal(false);
+  readonly isEditorCollapsed = signal(false);
+  readonly isTerminalCollapsed = signal(false);
 
-  // monaco editor options
-  editorOptions = {
+  /** Split sizes (percentages). */
+  mainSplitSizes: number[] = [...DEFAULT_MAIN_SIZES];
+  rightSplitSizes: number[] = [...DEFAULT_RIGHT_SIZES];
+
+  private editorInstance?: MonacoEditor;
+
+  /** Monaco editor configuration options. */
+  readonly editorOptions = {
     language: 'typescript',
     tabSize: 2,
     minimap: { enabled: false },
     fontSize: 14,
-    automaticLayout: true // This helps with resizing
+    automaticLayout: true,
   };
-  // code example
-  code: string = 'function x() {\n\tconsole.log("Hello world!");\n}';
 
-  // description in markdown format
-  description: string = '# Description\n\nThis is a description of the code example.';
-
-  // submit the code
-  submitCode() {
-    console.log(this.code);
+  /**
+   * Logs the current code to the console.
+   */
+  executeSubmitCode(): void {
+    console.log(this.code());
   }
 
-  onCloseEditor() {
+  /**
+   * Emits the close event.
+   */
+  executeCloseEditor(): void {
     this.showEditor.emit();
   }
 
-  onEditorInit(editor: any) {
+  /**
+   * Stores the editor instance and triggers layout.
+   * @param editor The Monaco editor instance.
+   */
+  handleEditorInit(editor: MonacoEditor): void {
     this.editorInstance = editor;
   }
 
-  onSplitDragEnd() {
-    if (this.editorInstance) {
-      this.editorInstance.layout();
-    }
+  /**
+   * Triggers the editor layout update when split panes are resized.
+   */
+  handleSplitDragEnd(): void {
+    this.editorInstance?.layout();
   }
 
-  toggleDescription() {
-    this.isDescriptionCollapsed.update(v => !v);
-    if (this.isDescriptionCollapsed()) {
-      this.mainSplitSizes = [4, 96];
-    } else {
-      this.mainSplitSizes = [30, 70];
-    }
-    this.onSplitDragEnd();
+  /**
+   * Toggles the description section visibility.
+   */
+  toggleDescription(): void {
+    this.isDescriptionCollapsed.update((isCollapsed) => !isCollapsed);
+    this.mainSplitSizes = this.isDescriptionCollapsed()
+      ? [...COLLAPSED_MAIN_SIZES]
+      : [...DEFAULT_MAIN_SIZES];
+    this.handleSplitDragEnd();
   }
 
-  toggleEditor() {
-    this.isEditorCollapsed.update(v => !v);
-    if (this.isEditorCollapsed()) {
-      this.rightSplitSizes = [6, 94];
-    } else {
-      this.rightSplitSizes = [60, 40];
-    }
-    this.onSplitDragEnd();
+  /**
+   * Toggles the editor section visibility.
+   */
+  toggleEditor(): void {
+    this.isEditorCollapsed.update((isCollapsed) => !isCollapsed);
+    this.rightSplitSizes = this.isEditorCollapsed()
+      ? [...COLLAPSED_EDITOR_SIZES]
+      : [...DEFAULT_RIGHT_SIZES];
+    this.handleSplitDragEnd();
   }
 
-  toggleTerminal() {
-    this.isTerminalCollapsed.update(v => !v);
-    if (this.isTerminalCollapsed()) {
-      this.rightSplitSizes = [94, 6];
-    } else {
-      this.rightSplitSizes = [60, 40];
-    }
-    this.onSplitDragEnd();
+  /**
+   * Toggles the terminal section visibility.
+   */
+  toggleTerminal(): void {
+    this.isTerminalCollapsed.update((isCollapsed) => !isCollapsed);
+    this.rightSplitSizes = this.isTerminalCollapsed()
+      ? [...COLLAPSED_TERMINAL_SIZES]
+      : [...DEFAULT_RIGHT_SIZES];
+    this.handleSplitDragEnd();
   }
 }

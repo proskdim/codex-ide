@@ -9,7 +9,7 @@
     >
       <div class="flex items-center space-x-2">
         <button
-          (click)="onCloseEditor()"
+          (click)="executeCloseEditor()"
           aria-label="Close editor"
           class="flex items-center text-[#999faf] hover:text-white hover:bg-red-500 px-2 py-1 rounded transition-all cursor-pointer"
         >
@@ -19,7 +19,7 @@
 
       <div class="flex items-center">
         <button
-          (click)="submitCode()"
+          (click)="executeSubmitCode()"
           class="bg-[#21be72] hover:bg-[#23ce7f] text-white px-6 py-2 rounded font-semibold text-sm shadow transition-all"
         >
           Submit
@@ -30,7 +30,7 @@
     <main class="flex-1 overflow-hidden relative z-10 p-2">
       <as-split
         direction="horizontal"
-        (dragEnd)="onSplitDragEnd()"
+        (dragEnd)="handleSplitDragEnd()"
         [gutterSize]="8"
         [disabled]="isDescriptionCollapsed()"
       >
@@ -44,12 +44,11 @@
               [class.justify-between]="!isDescriptionCollapsed()"
               [class.justify-center]="isDescriptionCollapsed()"
             >
-              <span
-                class="px-5 py-2 text-[#293146] flex items-center gap-2 tracking-wide"
-                *ngIf="!isDescriptionCollapsed()"
-              >
-                Description
-              </span>
+              @if (!isDescriptionCollapsed()) {
+                <span class="px-5 py-2 text-[#293146] flex items-center gap-2 tracking-wide">
+                  Description
+                </span>
+              }
               <button
                 (click)="toggleDescription()"
                 class="p-1 hover:bg-gray-200 rounded transition-colors cursor-pointer text-gray-500"
@@ -59,18 +58,15 @@
                 <span class="text-lg">{{ isDescriptionCollapsed() ? '→' : '←' }}</span>
               </button>
             </div>
-            <div
-              *ngIf="!isDescriptionCollapsed()"
-              class="flex-1 overflow-y-auto p-6 custom-scrollbar text-[#293146] leading-relaxed"
-            >
-              <markdown [data]="description" class="prose prose-sm max-w-none"></markdown>
-            </div>
-            <div
-              *ngIf="isDescriptionCollapsed()"
-              class="flex-1 flex items-center justify-center bg-gray-50"
-            >
-              <!-- Vertical text or just empty space -->
-            </div>
+            @if (!isDescriptionCollapsed()) {
+              <div class="flex-1 overflow-y-auto p-6 custom-scrollbar text-[#293146] leading-relaxed">
+                <markdown [data]="description()" class="prose prose-sm max-w-none"></markdown>
+              </div>
+            } @else {
+              <div class="flex-1 flex items-center justify-center bg-gray-50">
+                <!-- Vertical text or just empty space -->
+              </div>
+            }
           </section>
         </as-split-area>
 
@@ -78,7 +74,7 @@
         <as-split-area [size]="mainSplitSizes[1]">
           <as-split
             direction="vertical"
-            (dragEnd)="onSplitDragEnd()"
+            (dragEnd)="handleSplitDragEnd()"
             [gutterSize]="8"
             [disabled]="isEditorCollapsed() || isTerminalCollapsed()"
           >
@@ -92,12 +88,11 @@
                   [class.justify-between]="!isEditorCollapsed()"
                   [class.justify-center]="isEditorCollapsed()"
                 >
-                  <span
-                    class="px-5 py-2 text-[#293146] flex items-center gap-2 tracking-wide"
-                    *ngIf="!isEditorCollapsed()"
-                  >
-                    solution.ts
-                  </span>
+                  @if (!isEditorCollapsed()) {
+                    <span class="px-5 py-2 text-[#293146] flex items-center gap-2 tracking-wide">
+                      solution.ts
+                    </span>
+                  }
                   <button
                     (click)="toggleEditor()"
                     class="p-1 hover:bg-gray-200 rounded transition-colors cursor-pointer text-gray-500"
@@ -109,8 +104,9 @@
                 <div class="flex-1 min-h-0" [class.hidden]="isEditorCollapsed()">
                   <ngx-monaco-editor
                     [options]="editorOptions"
-                    [(ngModel)]="code"
-                    (onInit)="onEditorInit($event)"
+                    [ngModel]="code()"
+                    (ngModelChange)="code.set($event)"
+                    (onInit)="handleEditorInit($event)"
                     style="height: 100%"
                   ></ngx-monaco-editor>
                 </div>
@@ -127,12 +123,11 @@
                   [class.justify-between]="!isTerminalCollapsed()"
                   [class.justify-center]="isTerminalCollapsed()"
                 >
-                  <span
-                    class="px-5 py-2 text-[#293146] flex items-center gap-2 tracking-wide"
-                    *ngIf="!isTerminalCollapsed()"
-                  >
-                    Test cases
-                  </span>
+                  @if (!isTerminalCollapsed()) {
+                    <span class="px-5 py-2 text-[#293146] flex items-center gap-2 tracking-wide">
+                      Test cases
+                    </span>
+                  }
                   <button
                     (click)="toggleTerminal()"
                     class="p-1 hover:bg-gray-200 rounded transition-colors cursor-pointer text-gray-500"
@@ -141,12 +136,11 @@
                     <span class="text-lg">{{ isTerminalCollapsed() ? '↑' : '↓' }}</span>
                   </button>
                 </div>
-                <div
-                  *ngIf="!isTerminalCollapsed()"
-                  class="flex-1 min-h-0 py-3 px-4 text-[#293146] rounded-b-xl"
-                >
-                  test cases content
-                </div>
+                @if (!isTerminalCollapsed()) {
+                  <div class="flex-1 min-h-0 py-3 px-4 text-[#293146] rounded-b-xl">
+                    test cases content
+                  </div>
+                }
               </section>
             </as-split-area>
           </as-split>
