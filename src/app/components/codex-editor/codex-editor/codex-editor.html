@@ -1,11 +1,12 @@
-<div class="modal modal-open backdrop-blur-sm animate-fade-in">
+<div class="modal modal-open backdrop-blur-sm animate-in fade-in duration-300">
   <div
-    class="modal-box w-full h-full md:w-[98vw] md:h-[95vh] max-w-[1500px] p-0 flex flex-col bg-base-200 rounded-xl shadow-2xl overflow-hidden border border-base-300 relative animate-scale-up"
+    class="modal-box relative flex h-full w-full max-w-[1500px] flex-col overflow-hidden border border-base-300 bg-base-200 p-0 shadow-2xl animate-in zoom-in-95 duration-300 md:h-[95vh] md:w-[98vw] md:rounded-xl"
   >
+    <!-- Header Navbar -->
     <nav
-      class="navbar bg-base-100 border-b border-base-300 px-4 min-h-14 shrink-0 z-20 select-none"
+      class="navbar z-20 min-h-14 shrink-0 select-none border-b border-base-300 bg-base-100 px-4"
     >
-      <div class="flex-1">
+      <div class="navbar-start">
         <button
           (click)="executeCloseEditor()"
           aria-label="Close editor"
@@ -15,7 +16,11 @@
         </button>
       </div>
 
-      <div class="flex-none">
+      <div class="navbar-center">
+        <span class="text-sm font-bold tracking-widest opacity-50 uppercase">Codex Editor</span>
+      </div>
+
+      <div class="navbar-end">
         <button
           (click)="executeSubmitCode()"
           class="btn btn-success btn-sm px-6 font-bold shadow-sm"
@@ -25,7 +30,8 @@
       </div>
     </nav>
 
-    <main class="flex-1 overflow-hidden relative z-10 p-2">
+    <!-- Main Content Area -->
+    <main class="relative z-10 flex-1 overflow-hidden p-2">
       <as-split
         direction="horizontal"
         (dragEnd)="handleSplitDragEnd()"
@@ -35,15 +41,15 @@
         <!-- Description Section -->
         <as-split-area [size]="mainSplitSizes[0]" [minSize]="4">
           <section
-            class="card card-compact bg-base-100 border border-base-300 h-full rounded-xl overflow-hidden"
+            class="card card-compact h-full overflow-hidden rounded-xl border border-base-300 bg-base-100"
           >
             <div
-              class="flex bg-base-200/50 border-b border-base-300 text-sm font-bold shrink-0 items-center pr-2"
+              class="flex shrink-0 items-center border-b border-base-300 bg-base-200/50 text-sm font-bold"
               [class.justify-between]="!isDescriptionCollapsed()"
               [class.justify-center]="isDescriptionCollapsed()"
             >
               @if (!isDescriptionCollapsed()) {
-              <span class="px-5 py-2 opacity-70 flex items-center gap-2 tracking-wide">
+              <span class="flex items-center gap-2 px-5 py-2 tracking-wide opacity-70">
                 Description
               </span>
               }
@@ -56,12 +62,13 @@
                 <span class="text-lg">{{ isDescriptionCollapsed() ? '→' : '←' }}</span>
               </button>
             </div>
+
             @if (!isDescriptionCollapsed()) {
-            <div class="card-body p-6 overflow-y-auto custom-scrollbar leading-relaxed">
+            <div class="card-body custom-scrollbar overflow-y-auto p-6 leading-relaxed">
               <markdown [data]="description()" class="prose prose-sm max-w-none"></markdown>
             </div>
             } @else {
-            <div class="flex-1 flex items-center justify-center bg-base-200/30">
+            <div class="flex flex-1 items-center justify-center bg-base-200/30">
               <!-- Vertical text or just empty space -->
             </div>
             }
@@ -79,15 +86,15 @@
             <!-- Editor Section -->
             <as-split-area [size]="rightSplitSizes[0]" [minSize]="6">
               <section
-                class="card card-compact bg-base-100 border border-base-300 h-full rounded-xl overflow-hidden"
+                class="card card-compact h-full overflow-hidden rounded-xl border border-base-300 bg-base-100"
               >
                 <div
-                  class="flex bg-base-200/50 border-b border-base-300 text-sm font-bold shrink-0 items-center pr-2"
+                  class="flex shrink-0 items-center border-b border-base-300 bg-base-200/50 text-sm font-bold"
                   [class.justify-between]="!isEditorCollapsed()"
                   [class.justify-center]="isEditorCollapsed()"
                 >
                   @if (!isEditorCollapsed()) {
-                  <span class="px-5 py-2 opacity-70 flex items-center gap-2 tracking-wide">
+                  <span class="flex items-center gap-2 px-5 py-2 tracking-wide opacity-70">
                     solution.ts
                   </span>
                   }
@@ -99,7 +106,7 @@
                     <span class="text-lg">{{ isEditorCollapsed() ? '↓' : '↑' }}</span>
                   </button>
                 </div>
-                <div class="flex-1 min-h-0" [class.hidden]="isEditorCollapsed()">
+                <div class="min-h-0 flex-1" [class.hidden]="isEditorCollapsed()">
                   <ngx-monaco-editor
                     [options]="editorOptions"
                     [ngModel]="code()"
@@ -114,17 +121,31 @@
             <!-- Terminal / Test cases Section -->
             <as-split-area [size]="rightSplitSizes[1]" [minSize]="6">
               <section
-                class="card card-compact bg-base-100 border border-base-300 h-full rounded-xl overflow-hidden"
+                class="card card-compact h-full overflow-hidden rounded-xl border border-base-300 bg-base-100"
               >
                 <div
-                  class="flex bg-base-200/50 border-b border-base-300 text-sm font-bold shrink-0 items-center pr-2"
+                  class="flex shrink-0 items-center border-b border-base-300 bg-base-200/50 text-sm font-bold"
                   [class.justify-between]="!isTerminalCollapsed()"
                   [class.justify-center]="isTerminalCollapsed()"
                 >
                   @if (!isTerminalCollapsed()) {
-                  <span class="px-5 py-2 opacity-70 flex items-center gap-2 tracking-wide">
-                    Test cases
-                  </span>
+                  <div role="tablist" class="tabs tabs-bordered tabs-sm px-2">
+                    <input
+                      type="radio"
+                      name="terminal_tabs"
+                      role="tab"
+                      class="tab"
+                      aria-label="Test cases"
+                      checked="checked"
+                    />
+                    <input
+                      type="radio"
+                      name="terminal_tabs"
+                      role="tab"
+                      class="tab"
+                      aria-label="Result"
+                    />
+                  </div>
                   }
                   <button
                     (click)="toggleTerminal()"
@@ -135,7 +156,12 @@
                   </button>
                 </div>
                 @if (!isTerminalCollapsed()) {
-                <div class="card-body p-4 opacity-80">test cases content</div>
+                <div class="card-body p-4">
+                  <div class="mockup-code bg-base-300 text-base-content shadow-inner">
+                    <pre data-prefix=">"><code>Running tests...</code></pre>
+                    <pre data-prefix=" " class="text-success"><code>Done!</code></pre>
+                  </div>
+                </div>
                 }
               </section>
             </as-split-area>
