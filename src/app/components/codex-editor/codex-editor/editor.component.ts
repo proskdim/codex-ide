@@ -34,6 +34,32 @@ export class EditorComponent {
 
   /** Markdown big description content. */
   readonly description = input<string>(`
+    # Problem Statement
+
+    You are given a problem statement and a code editor.
+
+    # Code Editor
+
+    The code editor is a Monaco editor that allows you to write and edit code.
+
+    # Terminal
+
+    The terminal is a terminal that allows you to run code and see the output.
+
+    \`\`\`bash
+    $ npm install
+    $ npm run start
+    \`\`\`
+
+    # Example
+
+    Input: 1
+    Output: 1
+
+    Input: 2
+    Output: 2
+
+    Input: 3
 \`\`\`typescript
 function x() {
   console.log("Hello world!");
