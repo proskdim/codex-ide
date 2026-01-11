@@ -71,8 +71,3 @@ as-split {
   background: var(--color-base-content);
   opacity: 0.2;
 }
-
-/* Hide monaco editor when collapsed to prevent layout issues */
-.hidden {
-  display: none !important;
-}

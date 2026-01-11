@@ -25,7 +25,7 @@ import { TerminalResultComponent } from './terminal-result.component';
             class="tab"
             aria-label="Test cases"
             [checked]="activeTab() === 'test-cases'"
-            (change)="activeTab.set('test-cases')"
+            (change)="onActiveTabChange('test-cases')"
           />
           <input
             type="radio"
@@ -34,14 +34,10 @@ import { TerminalResultComponent } from './terminal-result.component';
             class="tab"
             aria-label="Result"
             [checked]="activeTab() === 'result'"
-            (change)="activeTab.set('result')"
+            (change)="onActiveTabChange('result')"
           />
         </div>
-        <button
-          (click)="onToggleCollapse()"
-          class="btn btn-ghost btn-xs text-base-content/50"
-          [title]="isCollapsed() ? 'Expand' : 'Collapse'"
-        >
+        <button (click)="onToggleCollapse()" class="btn btn-ghost btn-xs text-base-content/50">
           <span class="text-lg">{{ isCollapsed() ? '↑' : '↓' }}</span>
         </button>
       </div>
@@ -80,5 +76,9 @@ export class EditorTerminalComponent {
   // Handles the collapse toggle click event.
   onToggleCollapse(): void {
     this.toggleCollapse.emit();
+  }
+
+  onActiveTabChange(event: 'test-cases' | 'result'): void {
+    this.activeTab.set(event);
   }
 }

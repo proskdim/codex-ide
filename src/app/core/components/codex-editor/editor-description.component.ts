@@ -49,7 +49,7 @@ import ClipboardJS from 'clipboard';
         </span>
         }
         <button
-          (click)="toggleCollapse.emit()"
+          (click)="onToggleCollapse()"
           class="btn btn-ghost btn-xs text-base-content/50"
           [class.mt-2]="isCollapsed()"
           [title]="isCollapsed() ? 'Expand' : 'Collapse'"
@@ -68,27 +68,28 @@ import ClipboardJS from 'clipboard';
           class="prose prose-sm max-w-none"
         />
       </div>
-      } @else {
-      <div class="flex flex-1 items-center justify-center bg-base-200/30">
-        <!-- Vertical text or just empty space -->
-      </div>
       }
     </section>
   `,
 })
 export class EditorDescriptionComponent {
+  // hack
   constructor() {
     if (isPlatformBrowser(inject(PLATFORM_ID))) {
       (window as unknown as { ClipboardJS: typeof ClipboardJS }).ClipboardJS = ClipboardJS;
     }
   }
 
-  /** Markdown content to display. */
+  // Markdown content to display.
   readonly content = input.required<string>();
 
-  /** Whether the description section is collapsed. */
+  // Whether the description section is collapsed.
   readonly isCollapsed = input.required<boolean>();
 
-  /** Emits when the collapse toggle is clicked. */
+  // Emits when the collapse toggle is clicked.
   readonly toggleCollapse = output<void>();
+
+  onToggleCollapse(): void {
+    this.toggleCollapse.emit();
+  }
 }

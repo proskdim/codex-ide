@@ -11,16 +11,12 @@ import { isPlatformBrowser } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { MonacoEditorModule } from 'ngx-monaco-editor-v2';
 
-/**
- * Represents the Monaco editor instance layout method.
- */
+// Represents the Monaco editor instance layout method.
 interface MonacoEditor {
   layout(): void;
 }
 
-/**
- * Represents the Monaco editor configuration options.
- */
+// Represents the Monaco editor configuration options.
 interface MonacoEditorOptions {
   language: string;
   tabSize: number;
@@ -38,39 +34,26 @@ interface MonacoEditorOptions {
   selector: 'app-editor-code',
   imports: [MonacoEditorModule, FormsModule],
   changeDetection: ChangeDetectionStrategy.OnPush,
-  styles: `
-    .hidden {
-      display: none !important;
-    }
-  `,
   template: `
     <section
       class="card card-compact h-full overflow-hidden rounded-xl border border-base-300 bg-base-100"
     >
       <div
-        class="flex shrink-0 items-center border-b border-base-300 bg-base-200/50 text-sm font-bold"
-        [class.justify-between]="!isCollapsed()"
-        [class.justify-center]="isCollapsed()"
+        class="flex shrink-0 items-center border-b border-base-300 bg-base-200/50 text-sm font-bold justify-between"
       >
-        @if (!isCollapsed()) {
         <span class="flex items-center gap-2 px-5 py-2 tracking-wide opacity-70">
           solution.ts
         </span>
-        }
-        <button
-          (click)="toggleCollapse.emit()"
-          class="btn btn-ghost btn-xs text-base-content/50"
-          [title]="isCollapsed() ? 'Expand' : 'Collapse'"
-        >
+        <button (click)="onToggleCollapse()" class="btn btn-ghost btn-xs text-base-content/50">
           <span class="text-lg">{{ isCollapsed() ? '↓' : '↑' }}</span>
         </button>
       </div>
-      <div class="min-h-0 flex-1" [class.hidden]="isCollapsed()">
+      <div class="min-h-0 flex-1">
         @if (isBrowser) {
         <ngx-monaco-editor
           [options]="options()"
           [ngModel]="code()"
-          (ngModelChange)="code.set($event)"
+          (ngModelChange)="onModelChange($event)"
           (onInit)="handleEditorInit($event)"
           style="height: 100%"
         ></ngx-monaco-editor>
@@ -80,35 +63,39 @@ interface MonacoEditorOptions {
   `,
 })
 export class EditorCodeComponent {
-  /** Code content in the editor. */
+  // Code content in the editor.
   readonly code = model.required<string>();
 
-  /** Whether the editor section is collapsed. */
+  // Whether the editor section is collapsed.
   readonly isCollapsed = input.required<boolean>();
 
-  /** Monaco editor configuration options. */
+  // Monaco editor configuration options.
   readonly options = input.required<MonacoEditorOptions>();
 
-  /** Emits when the collapse toggle is clicked. */
+  // Emits when the collapse toggle is clicked.
   readonly toggleCollapse = output<void>();
 
-  /** Whether the component is running in a browser environment. */
+  // Whether the component is running in a browser environment.
   protected readonly isBrowser = isPlatformBrowser(inject(PLATFORM_ID));
 
+  // Stores the editor instance.
   private editorInstance?: MonacoEditor;
 
-  /**
-   * Stores the editor instance.
-   * @param editor The Monaco editor instance.
-   */
+  // Handles the editor initialization.
   handleEditorInit(editor: MonacoEditor): void {
     this.editorInstance = editor;
   }
 
-  /**
-   * Triggers the editor layout update.
-   */
+  // Handles the editor layout update.
   layout(): void {
     this.editorInstance?.layout();
+  }
+
+  onToggleCollapse(): void {
+    this.toggleCollapse.emit();
+  }
+
+  onModelChange(event: string): void {
+    this.code.set(event);
   }
 }
