@@ -23,6 +23,9 @@
       ],
       "@codex-editor/*": [
         "./src/app/core/components/codex-editor/*"
+      ],
+      "@environments/*": [
+        "./src/environments/*"
       ]
     }
   },
