@@ -52,22 +52,3 @@ as-split {
   height: 100%;
   background-color: transparent;
 }
-
-/* Custom scrollbar for the description and other areas */
-.custom-scrollbar::-webkit-scrollbar {
-  width: 6px;
-}
-
-.custom-scrollbar::-webkit-scrollbar-track {
-  background: transparent;
-}
-
-.custom-scrollbar::-webkit-scrollbar-thumb {
-  background: var(--color-base-300);
-  border-radius: 10px;
-}
-
-.custom-scrollbar::-webkit-scrollbar-thumb:hover {
-  background: var(--color-base-content);
-  opacity: 0.2;
-}

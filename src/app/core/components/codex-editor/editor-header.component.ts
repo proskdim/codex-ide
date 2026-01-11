@@ -32,7 +32,7 @@ import { ChangeDetectionStrategy, Component, input, output } from '@angular/core
         <button
           (click)="onSubmitCode()"
           [disabled]="isSubmitting()"
-          class="btn btn-success btn-xs px-4 font-bold shadow-sm"
+          class="btn btn-xs shadow-sm"
         >
           @if (isSubmitting()) {
             <span class="loading loading-spinner loading-xs"></span>
