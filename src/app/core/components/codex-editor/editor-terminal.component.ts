@@ -1,5 +1,7 @@
 import { ChangeDetectionStrategy, Component, input, model, output } from '@angular/core';
 import { SubmissionResult } from '@app/core/models/judge0.model';
+import { TerminalTestCasesComponent } from './terminal-test-cases.component';
+import { TerminalResultComponent } from './terminal-result.component';
 
 /**
  * Terminal component for the Codex Editor.
@@ -7,6 +9,7 @@ import { SubmissionResult } from '@app/core/models/judge0.model';
  */
 @Component({
   selector: 'app-editor-terminal',
+  imports: [TerminalTestCasesComponent, TerminalResultComponent],
   template: `
     <section
       class="card card-compact h-full overflow-hidden rounded-xl border border-base-300 bg-base-100"
@@ -35,7 +38,7 @@ import { SubmissionResult } from '@app/core/models/judge0.model';
           />
         </div>
         <button
-          (click)="toggleCollapse.emit()"
+          (click)="onToggleCollapse()"
           class="btn btn-ghost btn-xs text-base-content/50"
           [title]="isCollapsed() ? 'Expand' : 'Collapse'"
         >
@@ -44,48 +47,14 @@ import { SubmissionResult } from '@app/core/models/judge0.model';
       </div>
       @if (!isCollapsed()) {
       <div class="card-body overflow-auto p-4">
-        @if (activeTab() === 'test-cases') { test cases } @else { @if (isSubmitting()) {
-        <div class="flex flex-col items-center justify-center py-8 text-base-content/50">
-          <span class="loading loading-spinner loading-md mb-2"></span>
-          <p>Executing code...</p>
-        </div>
-        } @else if (submissionResult(); as result) {
-        <div class="space-y-4">
-          <div class="flex items-center gap-2">
-            <span class="badge" [class]="result.status.id === 3 ? 'badge-success' : 'badge-error'">
-              {{ result.status.description }}
-            </span>
-            <span class="text-xs text-base-content/50">
-              {{ result.time }}s | {{ result.memory }} KB
-            </span>
-          </div>
-
-          @if (result.stdout) {
-          <div class="space-y-1">
-            <p class="text-xs font-bold uppercase opacity-50">Output</p>
-            <pre><code>{{ decodeBase64(result.stdout) }}</code></pre>
-          </div>
-          } @if (result.stderr) {
-          <div class="space-y-1">
-            <p class="text-xs font-bold uppercase text-error opacity-50">Error</p>
-            <div class="mockup-code bg-error/10 text-error shadow-inner">
-              <pre><code>{{ decodeBase64(result.stderr) }}</code></pre>
-            </div>
-          </div>
-          } @if (result.message) {
-          <div class="space-y-1">
-            <p class="text-xs font-bold uppercase opacity-50">Message</p>
-            <div class="alert alert-info py-2 text-sm">
-              <span>{{ result.message }}</span>
-            </div>
-          </div>
-          }
-        </div>
+        @if (activeTab() === 'test-cases') {
+        <app-terminal-test-cases />
         } @else {
-        <div class="flex h-full text-base-content/30">
-          <p>No results. Submit your code to see the output.</p>
-        </div>
-        } }
+        <app-terminal-result
+          [isSubmitting]="isSubmitting()"
+          [submissionResult]="submissionResult()"
+        />
+        }
       </div>
       }
     </section>
@@ -108,12 +77,8 @@ export class EditorTerminalComponent {
   // Emits when the collapse toggle is clicked.
   readonly toggleCollapse = output<void>();
 
-  // Decodes a base64 string.
-  decodeBase64(value: string): string {
-    try {
-      return atob(value);
-    } catch {
-      return value;
-    }
+  // Handles the collapse toggle click event.
+  onToggleCollapse(): void {
+    this.toggleCollapse.emit();
   }
 }
