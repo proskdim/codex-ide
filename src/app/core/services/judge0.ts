@@ -1,27 +1,33 @@
 import { HttpClient } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
+import { Observable } from 'rxjs';
+import {
+  Judge0Language,
+  Judge0SubmissionDetails,
+  Judge0SubmissionResponse,
+} from './judge0.types';
 
+/**
+ * Service for interacting with the Judge0 API via RapidAPI.
+ */
 @Injectable({
   providedIn: 'root',
 })
 export class Judge0 {
-  private http = inject(HttpClient);  
+  private readonly http = inject(HttpClient);
 
-  // base url for judge0
   private readonly baseUrl = 'https://judge029.p.rapidapi.com';
 
-  // rapidapi key for judge0
   private readonly rapidapiKey = 'd26a5cc027msh524b0630ab98aaap133da9jsnb5234d4b9a1e';
 
-  // rapidAPI host for judge0
   private readonly rapidapiHost = 'judge029.p.rapidapi.com';
 
   /**
    * Retrieves the list of supported programming languages from Judge0.
    * @returns An Observable containing the list of languages.
    */
-  getLanguages(): import('rxjs').Observable<unknown> {
-    return this.http.get(`${this.baseUrl}/languages`, {
+  getLanguages(): Observable<Judge0Language[]> {
+    return this.http.get<Judge0Language[]>(`${this.baseUrl}/languages`, {
       headers: {
         'x-rapidapi-key': this.rapidapiKey,
         'x-rapidapi-host': this.rapidapiHost,
@@ -35,15 +41,15 @@ export class Judge0 {
    * @param languageId The ID of the programming language.
    * @param stdin The standard input for the execution.
    * @param expectedOutput The expected standard output.
-   * @returns An Observable containing the submission details.
+   * @returns An Observable containing the submission response (token).
    */
   createSubmission(
     sourceCode: string,
     languageId: string,
     stdin: string,
     expectedOutput: string
-  ): import('rxjs').Observable<unknown> {
-    return this.http.post(
+  ): Observable<Judge0SubmissionResponse> {
+    return this.http.post<Judge0SubmissionResponse>(
       `${this.baseUrl}/submissions`,
       {
         source_code: sourceCode,
@@ -70,8 +76,8 @@ export class Judge0 {
    * @param submissionId The ID of the submission to retrieve.
    * @returns An Observable containing the submission details.
    */
-  getSubmission(submissionId: string): import('rxjs').Observable<unknown> {
-    return this.http.get(`${this.baseUrl}/submissions/${submissionId}`, {
+  getSubmission(submissionId: string): Observable<Judge0SubmissionDetails> {
+    return this.http.get<Judge0SubmissionDetails>(`${this.baseUrl}/submissions/${submissionId}`, {
       headers: {
         'x-rapidapi-key': this.rapidapiKey,
         'x-rapidapi-host': this.rapidapiHost,

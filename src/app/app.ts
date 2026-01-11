@@ -1,13 +1,13 @@
-import { Component, inject, signal } from '@angular/core';
-import { EditorComponent } from './components/codex-editor/codex-editor/editor.component';
-import { CommonModule } from '@angular/common';
+import { ChangeDetectionStrategy, Component, inject, signal } from '@angular/core';
+import { CodexEditorComponent } from '@codex-editor/codex-editor.component';
 import { Judge0 } from './core/services/judge0';
 
 @Component({
   selector: 'app-root',
-  imports: [CommonModule, EditorComponent],
+  imports: [CodexEditorComponent],
   templateUrl: './app.html',
   styleUrl: './app.css',
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class App {
   readonly judge0 = inject(Judge0);

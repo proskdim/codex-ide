@@ -1,4 +1,4 @@
-import { Component, input, output } from '@angular/core';
+import { ChangeDetectionStrategy, Component, input, output } from '@angular/core';
 
 /**
  * Terminal component for the Codex Editor.
@@ -6,13 +6,11 @@ import { Component, input, output } from '@angular/core';
  */
 @Component({
   selector: 'app-editor-terminal',
-  standalone: true,
   template: `
     <section
       class="card card-compact h-full overflow-hidden rounded-xl border border-base-300 bg-base-100"
     >
       <div
-        class="flex shrink-0 items-center border-b border-base-300 bg-base-200/50 text-sm font-bold"
         class="flex shrink-0 items-center justify-between border-b border-base-300 bg-base-200/50 text-sm font-bold"
       >
         <div role="tablist" class="tabs tabs-bordered tabs-sm px-2">
@@ -50,6 +48,7 @@ import { Component, input, output } from '@angular/core';
       }
     </section>
   `,
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class EditorTerminalComponent {
   /** Whether the terminal section is collapsed. */

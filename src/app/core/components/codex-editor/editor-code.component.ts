@@ -1,4 +1,12 @@
-import { Component, PLATFORM_ID, inject, input, model, output } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  PLATFORM_ID,
+  inject,
+  input,
+  model,
+  output,
+} from '@angular/core';
 import { isPlatformBrowser } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { MonacoEditorModule } from 'ngx-monaco-editor-v2';
@@ -28,8 +36,8 @@ interface MonacoEditorOptions {
  */
 @Component({
   selector: 'app-editor-code',
-  standalone: true,
   imports: [MonacoEditorModule, FormsModule],
+  changeDetection: ChangeDetectionStrategy.OnPush,
   styles: `
     .hidden {
       display: none !important;

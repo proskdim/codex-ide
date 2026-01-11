@@ -1,4 +1,4 @@
-import { Component, output } from '@angular/core';
+import { ChangeDetectionStrategy, Component, output } from '@angular/core';
 
 /**
  * Header component for the Codex Editor.
@@ -6,7 +6,6 @@ import { Component, output } from '@angular/core';
  */
 @Component({
   selector: 'app-editor-header',
-  standalone: true,
   template: `
     <nav
       class="navbar z-20 min-h-10 h-10 shrink-0 select-none border-b border-base-300 bg-base-100 px-3"
@@ -37,6 +36,7 @@ import { Component, output } from '@angular/core';
       </div>
     </nav>
   `,
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class EditorHeaderComponent {
   /** Emits when the close button is clicked. */

@@ -1,9 +1,18 @@
-import { Component, computed, input, model, output, signal, viewChild } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  computed,
+  input,
+  model,
+  output,
+  signal,
+  viewChild,
+} from '@angular/core';
 import { AngularSplitModule } from 'angular-split';
-import { EditorHeaderComponent } from './editor-header.component';
-import { EditorDescriptionComponent } from './editor-description.component';
-import { EditorCodeComponent } from './editor-code.component';
-import { EditorTerminalComponent } from './editor-terminal.component';
+import { EditorHeaderComponent } from '@codex-editor/editor-header.component';
+import { EditorDescriptionComponent } from '@codex-editor/editor-description.component';
+import { EditorCodeComponent } from '@codex-editor/editor-code.component';
+import { EditorTerminalComponent } from '@codex-editor/editor-terminal.component';
 
 const DEFAULT_MAIN_SIZES = [45, 55] as const;
 const DEFAULT_EDITOR_SIZES = [60, 40] as const;
@@ -16,8 +25,7 @@ const COLLAPSED_TERMINAL_SIZES = [94, 6] as const;
  * a Monaco code editor, and a terminal/test cases area.
  */
 @Component({
-  selector: 'app-editor',
-  standalone: true,
+  selector: 'app-codex-editor',
   imports: [
     AngularSplitModule,
     EditorHeaderComponent,
@@ -25,10 +33,11 @@ const COLLAPSED_TERMINAL_SIZES = [94, 6] as const;
     EditorCodeComponent,
     EditorTerminalComponent,
   ],
-  templateUrl: './editor.component.html',
-  styleUrl: './editor.component.css',
+  templateUrl: './codex-editor.component.html',
+  styleUrl: './codex-editor.component.css',
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class EditorComponent {
+export class CodexEditorComponent {
   /** Emits when the editor should be closed. */
   readonly showEditor = output<void>();
 

@@ -30,4 +30,12 @@ describe('App', () => {
     const compiled = fixture.nativeElement as HTMLElement;
     expect(compiled.querySelector('h1')?.textContent).toContain('Codex IDE');
   });
+
+  it('should toggle editor visibility', () => {
+    const fixture = TestBed.createComponent(App);
+    const app = fixture.componentInstance;
+    const initialVisible = app.isEditorVisible();
+    app.executeToggleEditor();
+    expect(app.isEditorVisible()).toBe(!initialVisible);
+  });
 });

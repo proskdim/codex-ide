@@ -1,4 +1,11 @@
-import { Component, input, output, inject, PLATFORM_ID } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  input,
+  output,
+  inject,
+  PLATFORM_ID,
+} from '@angular/core';
 import { isPlatformBrowser } from '@angular/common';
 import { MarkdownModule } from 'ngx-markdown';
 import ClipboardJS from 'clipboard';
@@ -9,8 +16,8 @@ import ClipboardJS from 'clipboard';
  */
 @Component({
   selector: 'app-editor-description',
-  standalone: true,
   imports: [MarkdownModule],
+  changeDetection: ChangeDetectionStrategy.OnPush,
   styles: `
     .custom-scrollbar::-webkit-scrollbar {
       width: 6px;

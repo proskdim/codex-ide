@@ -13,7 +13,18 @@
     "experimentalDecorators": true,
     "importHelpers": true,
     "target": "ES2022",
-    "module": "preserve"
+    "module": "preserve",
+    "paths": {
+      "@app/core/*": [
+        "./src/app/core/*"
+      ],
+      "@components/*": [
+        "./src/app/core/components/*"
+      ],
+      "@codex-editor/*": [
+        "./src/app/core/components/codex-editor/*"
+      ]
+    }
   },
   "angularCompilerOptions": {
     "enableI18nLegacyMessageIdFormat": false,
