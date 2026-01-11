@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, output } from '@angular/core';
+import { ChangeDetectionStrategy, Component, input, output } from '@angular/core';
 
 /**
  * Header component for the Codex Editor.
@@ -12,7 +12,7 @@ import { ChangeDetectionStrategy, Component, output } from '@angular/core';
     >
       <div class="navbar-start">
         <button
-          (click)="closeEditor.emit()"
+          (click)="onCloseEditor()"
           aria-label="Close editor"
           class="btn btn-ghost btn-xs text-base-content/50 hover:bg-error hover:text-error-content"
         >
@@ -30,9 +30,13 @@ import { ChangeDetectionStrategy, Component, output } from '@angular/core';
 
       <div class="navbar-end">
         <button
-          (click)="submitCode.emit()"
+          (click)="onSubmitCode()"
+          [disabled]="isSubmitting()"
           class="btn btn-success btn-xs px-4 font-bold shadow-sm"
         >
+          @if (isSubmitting()) {
+            <span class="loading loading-spinner loading-xs"></span>
+          }
           Submit
         </button>
       </div>
@@ -41,9 +45,22 @@ import { ChangeDetectionStrategy, Component, output } from '@angular/core';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class EditorHeaderComponent {
-  /** Emits when the close button is clicked. */
+  // Whether the code is currently being submitted.
+  readonly isSubmitting = input<boolean>(false);
+
+  // Emits when the close button is clicked.
   readonly closeEditor = output<void>();
 
-  /** Emits when the submit button is clicked. */
+  // Emits when the submit button is clicked.
   readonly submitCode = output<void>();
+
+  // Handles the submit button click event.
+  onSubmitCode(): void {
+    this.submitCode.emit();
+  }
+
+  // Handles the close button click event.
+  onCloseEditor(): void {
+    this.closeEditor.emit();
+  }
 }

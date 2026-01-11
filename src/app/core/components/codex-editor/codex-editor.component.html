@@ -9,8 +9,9 @@
   >
     <!-- Header Navbar -->
     <app-editor-header
-      (closeEditor)="executeCloseEditor()"
-      (submitCode)="executeSubmitCode()"
+      [isSubmitting]="isSubmitting()"
+      (closeEditor)="closeEditor()"
+      (submitCode)="submitCode()"
     />
 
     <!-- Main Content Area -->
@@ -49,7 +50,10 @@
             <!-- Terminal / Test cases Section -->
             <as-split-area [size]="rightSplitSizes()[1]" [minSize]="6">
               <app-editor-terminal
+                [(activeTab)]="terminalTab"
                 [isCollapsed]="isTerminalCollapsed()"
+                [isSubmitting]="isSubmitting()"
+                [submissionResult]="submissionResult()"
                 (toggleCollapse)="toggleTerminal()"
               />
             </as-split-area>
