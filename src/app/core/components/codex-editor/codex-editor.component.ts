@@ -2,6 +2,7 @@ import {
   ChangeDetectionStrategy,
   Component,
   computed,
+  inject,
   input,
   model,
   output,
@@ -13,12 +14,50 @@ import { EditorHeaderComponent } from '@codex-editor/editor-header.component';
 import { EditorDescriptionComponent } from '@codex-editor/editor-description.component';
 import { EditorCodeComponent } from '@codex-editor/editor-code.component';
 import { EditorTerminalComponent } from '@codex-editor/editor-terminal.component';
+import { Judge0 } from '@app/core/services/judge0';
+import { CreateSubmissionData } from '@app/core/models/judge0.model';
 
 const DEFAULT_MAIN_SIZES = [45, 55] as const;
 const DEFAULT_EDITOR_SIZES = [60, 40] as const;
 const COLLAPSED_MAIN_SIZES = [4, 96] as const;
 const COLLAPSED_EDITOR_SIZES = [6, 94] as const;
 const COLLAPSED_TERMINAL_SIZES = [94, 6] as const;
+
+const DEFAULT_DESCRIPTION = `
+# Problem Statement
+
+You are given a problem statement and a code editor.
+
+# Code Editor
+
+The code editor is a Monaco editor that allows you to write and edit code.
+
+# Terminal
+
+The terminal is a terminal that allows you to run code and see the output.
+
+\`\`\`bash
+$ npm install
+$ npm run start
+\`\`\`
+
+# Example
+
+Input: 1
+Output: 1
+
+Input: 2
+Output: 2
+
+Input: 3
+\`\`\`typescript
+function x() {
+  console.log("Hello world!");
+}
+\`\`\`
+`;
+
+const DEFAULT_CODE = 'function x() {\n\tconsole.log("Hello world!");\n}';
 
 /**
  * EditorComponent provides a split-pane interface with a markdown description,
@@ -38,46 +77,16 @@ const COLLAPSED_TERMINAL_SIZES = [94, 6] as const;
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class CodexEditorComponent {
+  private readonly judge0 = inject(Judge0);
+
   /** Emits when the editor should be closed. */
   readonly showEditor = output<void>();
 
   /** Markdown big description content. */
-  readonly description = input<string>(`
-    # Problem Statement
-
-    You are given a problem statement and a code editor.
-
-    # Code Editor
-
-    The code editor is a Monaco editor that allows you to write and edit code.
-
-    # Terminal
-
-    The terminal is a terminal that allows you to run code and see the output.
-
-    \`\`\`bash
-    $ npm install
-    $ npm run start
-    \`\`\`
-
-    # Example
-
-    Input: 1
-    Output: 1
-
-    Input: 2
-    Output: 2
-
-    Input: 3
-\`\`\`typescript
-function x() {
-  console.log("Hello world!");
-}
-\`\`\`
-`);
+  readonly description = input<string>(DEFAULT_DESCRIPTION);
 
   /** Code content in the editor. */
-  readonly code = model<string>('function x() {\n\tconsole.log("Hello world!");\n}');
+  readonly code = model<string>(DEFAULT_CODE);
 
   /** Split sizes (percentages). */
   readonly mainSplitSizes = signal<number[]>([...DEFAULT_MAIN_SIZES]);
@@ -102,10 +111,23 @@ function x() {
   };
 
   /**
-   * Logs the current code to the console.
+   * Submits the current code to Judge0 for execution.
    */
   executeSubmitCode(): void {
-    console.log(this.code());
+    const submissionData: CreateSubmissionData = {
+      language_id: '63', // JavaScript
+      source_code: btoa(this.code()),
+    };
+
+    this.judge0.createSubmission(submissionData).subscribe({
+      next: (response) => {
+        console.log('Submission created:', response.token);
+        // TODO: Implement polling or wait for result if needed
+      },
+      error: (err) => {
+        console.error('Failed to create submission:', err);
+      },
+    });
   }
 
   /**
@@ -115,9 +137,6 @@ function x() {
     this.showEditor.emit();
   }
 
-  /**
-   * Triggers the editor layout update when split panes are resized.
-   */
   /**
    * Triggers the editor layout update when split panes are resized.
    * Synchronizes the split sizes signals in real-time.

@@ -21,7 +21,9 @@ import { ChangeDetectionStrategy, Component, output } from '@angular/core';
       </div>
 
       <div class="navbar-center">
-        <span class="text-[10px] font-bold tracking-[0.2em] opacity-40 uppercase"
+        <span
+          id="editor-title"
+          class="text-[10px] font-bold tracking-[0.2em] opacity-40 uppercase"
           >Codex Editor</span
         >
       </div>
