@@ -81,8 +81,13 @@ import ClipboardJS from 'clipboard';
   `,
 })
 export class EditorTaskDescriptionComponent {
+  // Info icon.
   readonly InfoIcon = Info;
+
+  // Arrow right icon.
   readonly ArrowRightIcon = ArrowRight;
+
+  // Arrow left icon.
   readonly ArrowLeftIcon = ArrowLeft;
 
   // hack

@@ -60,6 +60,7 @@
     "@tailwindcss/typography": "^0.5.19",
     "@types/express": "^5.0.1",
     "@types/node": "^20.17.19",
+    "@types/prismjs": "^1.26.5",
     "angular-eslint": "^21.1.0",
     "eslint": "^9.39.2",
     "jsdom": "^27.1.0",
