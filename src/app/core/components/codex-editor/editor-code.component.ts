@@ -26,6 +26,12 @@ interface MonacoEditorOptions {
   automaticLayout: boolean;
   fontFamily: string;
   padding?: { top?: number; bottom?: number };
+  fixedOverflowWidgets?: boolean;
+  hover?: {
+    delay?: number;
+    sticky?: boolean;
+    above?: boolean;
+  };
 }
 
 /**

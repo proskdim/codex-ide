@@ -12,12 +12,8 @@ import { EditorHeaderComponent } from '@codex-editor/editor-header.component';
 import { EditorDescriptionComponent } from '@codex-editor/editor-description.component';
 import { EditorCodeComponent } from '@codex-editor/editor-code.component';
 import { EditorTerminalComponent } from '@codex-editor/editor-terminal.component';
-import { Judge0Service } from '@app/core/services/judge/judge0';
-import {
-  Submission,
-  SubmissionResult,
-} from '@app/core/types/judge0.types';
-import { finalize } from 'rxjs';
+import { SubmissionService } from '@app/core/services/submission.service';
+import { Submission } from '@app/core/types/judge0.types';
 const DEFAULT_MAIN_SIZES = [45, 55] as const;
 const DEFAULT_EDITOR_SIZES = [60, 40] as const;
 const COLLAPSED_MAIN_SIZES = [4, 96] as const;
@@ -77,7 +73,13 @@ const DEFAULT_EXPECTED_OUTPUT = 'Hello, World!';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class CodexEditorComponent {
-  private readonly judge0 = inject(Judge0Service);
+  private readonly submissionService = inject(SubmissionService);
+
+  // Submission state.
+  readonly isSubmitting = this.submissionService.isSubmitting;
+
+  // result of the submission.
+  readonly submissionResult = this.submissionService.submissionResult;
 
   // Emits when the editor should be closed.
   readonly editorClosed = output<void>();
@@ -96,12 +98,6 @@ export class CodexEditorComponent {
 
   // Split sizes (percentages) for the right side.
   readonly rightSplitSizes = signal<number[]>([...DEFAULT_EDITOR_SIZES]);
-
-  // Submission state.
-  readonly isSubmitting = signal<boolean>(false);
-
-  // result of the submission.
-  readonly submissionResult = signal<SubmissionResult | null>(null);
 
   // The currently active tab in the terminal.
   readonly terminalTab = signal<'test-cases' | 'result'>('test-cases');
@@ -124,6 +120,7 @@ export class CodexEditorComponent {
   private readonly codeEditor = viewChild(EditorCodeComponent);
 
   // Monaco editor configuration options.
+  // fixedOverflowWidgets help to prevent the hover widgets from being clipped.
   readonly editorOptions = {
     language: 'typescript',
     tabSize: 2,
@@ -131,8 +128,13 @@ export class CodexEditorComponent {
     fontSize: 14,
     automaticLayout: true,
     fontFamily: 'JetBrains Mono, monospace',
-    padding: { top: 15 },
+    padding: { top: 20 },
     fixedOverflowWidgets: true,
+    hover: {
+      delay: 150,
+      sticky: true,
+      above: true,
+    },
   };
 
   // Submits the current code to Judge0 for execution.
@@ -141,8 +143,6 @@ export class CodexEditorComponent {
       return;
     }
 
-    this.isSubmitting.set(true);
-    this.submissionResult.set(null);
     this.terminalTab.set('result');
 
     if (this.isTerminalCollapsed()) {
@@ -155,14 +155,7 @@ export class CodexEditorComponent {
       expected_output: this.expectedOutput(),
     };
 
-    this.judge0
-      .execute(submissionData)
-      .pipe(finalize(() => this.isSubmitting.set(false)))
-      .subscribe({
-        next: (result) => {
-          this.submissionResult.set(result);
-        }
-      });
+    this.submissionService.execute(submissionData);
   }
 
   // Emits when the editor should be closed.

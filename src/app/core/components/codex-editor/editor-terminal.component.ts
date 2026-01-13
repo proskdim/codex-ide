@@ -1,8 +1,13 @@
 import { ChangeDetectionStrategy, Component, input, output } from '@angular/core';
-import { SubmissionResult } from '@app/core/types/judge0.types';
 import { TerminalTestCasesComponent } from './terminal-test-cases.component';
 import { TerminalResultComponent } from './terminal-result.component';
-import { LucideAngularModule, ClipboardList, Terminal, ChevronDown, ChevronUp } from 'lucide-angular';
+import {
+  LucideAngularModule,
+  ClipboardList,
+  Terminal,
+  ChevronDown,
+  ChevronUp,
+} from 'lucide-angular';
 
 /**
  * Terminal component for the Codex Editor.
@@ -54,7 +59,10 @@ import { LucideAngularModule, ClipboardList, Terminal, ChevronDown, ChevronUp } 
           [attr.aria-label]="isCollapsed() ? 'Expand terminal' : 'Collapse terminal'"
           [attr.aria-expanded]="!isCollapsed()"
         >
-          <lucide-icon [name]="isCollapsed() ? ChevronUpIcon : ChevronDownIcon" class="h-4 w-4"></lucide-icon>
+          <lucide-icon
+            [name]="isCollapsed() ? ChevronUpIcon : ChevronDownIcon"
+            class="h-4 w-4"
+          ></lucide-icon>
         </button>
       </div>
       @if (!isCollapsed()) {
@@ -65,10 +73,7 @@ import { LucideAngularModule, ClipboardList, Terminal, ChevronDown, ChevronUp } 
           (expectedOutputChange)="onExpectedOutputChange($event)"
         />
         } @else {
-        <app-terminal-result
-          [isSubmitting]="isSubmitting()"
-          [submissionResult]="submissionResult()"
-        />
+        <app-terminal-result />
         }
       </div>
       }
@@ -84,12 +89,6 @@ export class EditorTerminalComponent {
 
   // Whether the terminal section is collapsed.
   readonly isCollapsed = input.required<boolean>();
-
-  // Whether the code is currently being submitted.
-  readonly isSubmitting = input<boolean>(false);
-
-  // The result of the code submission.
-  readonly submissionResult = input<SubmissionResult | null>(null);
 
   // The expected output for the submission.
   readonly expectedOutput = input<string>('');

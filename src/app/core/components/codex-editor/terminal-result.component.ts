@@ -1,6 +1,7 @@
-import { ChangeDetectionStrategy, Component, input } from '@angular/core';
-import { JUDGE0_STATUS, SubmissionResult } from '@app/core/types/judge0.types';
-import { LucideAngularModule, Clock, Cpu, PlayCircle } from 'lucide-angular';
+import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
+import { SubmissionService } from '@app/core/services/submission.service';
+import { JUDGE0_STATUS } from '@app/core/types/judge0.types';
+import { LucideAngularModule, Clock, Cpu, CheckCircle } from 'lucide-angular';
 
 /**
  * Component for displaying the execution result in the terminal.
@@ -90,15 +91,17 @@ import { LucideAngularModule, Clock, Cpu, PlayCircle } from 'lucide-angular';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class TerminalResultComponent {
+  private readonly submissionService = inject(SubmissionService);
+
   readonly ClockIcon = Clock;
   readonly CpuIcon = Cpu;
-  readonly PlayCircleIcon = PlayCircle;
+  readonly CheckCircleIcon = CheckCircle;
 
   // Whether the code is currently being submitted.
-  readonly isSubmitting = input<boolean>(false);
+  readonly isSubmitting = this.submissionService.isSubmitting;
 
   // The result of the code submission.
-  readonly submissionResult = input<SubmissionResult | null>(null);
+  readonly submissionResult = this.submissionService.submissionResult;
 
   // Gets the CSS class for the submission status badge.
   getStatusClass(statusId: number): string {
