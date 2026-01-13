@@ -1,4 +1,5 @@
 import { ChangeDetectionStrategy, Component, input, output } from '@angular/core';
+import { LucideAngularModule, X, Play } from 'lucide-angular';
 
 /**
  * Header component for the Codex Editor.
@@ -6,38 +7,45 @@ import { ChangeDetectionStrategy, Component, input, output } from '@angular/core
  */
 @Component({
   selector: 'app-editor-header',
+  imports: [LucideAngularModule],
   template: `
     <nav
-      class="navbar z-20 min-h-10 h-10 shrink-0 select-none border-b border-base-300 bg-base-100 px-3"
+      class="navbar z-20 min-h-12 h-12 shrink-0 select-none rounded-t-xl border-b border-base-300 bg-base-100 px-4"
     >
-      <div class="navbar-start">
+      <div class="navbar-start gap-2">
         <button
           (click)="onCloseEditor()"
           aria-label="Close editor"
-          class="btn btn-ghost btn-xs text-base-content/50 hover:bg-error hover:text-error-content"
+          class="btn btn-ghost btn-sm btn-circle text-base-content/50 hover:bg-error hover:text-error-content"
         >
-          <span class="text-sm">✕</span>
+          <lucide-icon [name]="XIcon" class="h-4 w-4"></lucide-icon>
         </button>
       </div>
 
       <div class="navbar-center">
         <span
           id="editor-title"
-          class="text-[10px] font-bold tracking-[0.2em] opacity-40 uppercase"
-          >Codex Editor</span
+          class="text-xs font-black tracking-[0.3em] opacity-20 uppercase"
+          >Codex IDE</span
         >
       </div>
 
-      <div class="navbar-end">
+      <div class="navbar-end gap-2">
+        <div class="badge badge-ghost badge-sm font-mono opacity-50">
+          TypeScript
+        </div>
+        
         <button
           (click)="onSubmitCode()"
           [disabled]="isSubmitting()"
-          class="btn btn-xs shadow-sm"
+          class="btn btn-primary btn-sm shadow-lg px-6 gap-2"
         >
           @if (isSubmitting()) {
             <span class="loading loading-spinner loading-xs"></span>
+          } @else {
+            <lucide-icon [name]="PlayIcon" class="h-3.5 w-3.5"></lucide-icon>
           }
-          Submit
+          Run Code
         </button>
       </div>
     </nav>
@@ -45,6 +53,8 @@ import { ChangeDetectionStrategy, Component, input, output } from '@angular/core
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class EditorHeaderComponent {
+  readonly XIcon = X;
+  readonly PlayIcon = Play;
   // Whether the code is currently being submitted.
   readonly isSubmitting = input<boolean>(false);
 

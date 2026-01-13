@@ -3,8 +3,6 @@ import {
   Component,
   computed,
   inject,
-  input,
-  model,
   output,
   signal,
   viewChild,
@@ -14,54 +12,55 @@ import { EditorHeaderComponent } from '@codex-editor/editor-header.component';
 import { EditorDescriptionComponent } from '@codex-editor/editor-description.component';
 import { EditorCodeComponent } from '@codex-editor/editor-code.component';
 import { EditorTerminalComponent } from '@codex-editor/editor-terminal.component';
-import { Judge0 } from '@app/core/services/judge0';
-import { CreateSubmissionData, SubmissionResult } from '@app/core/models/judge0.model';
-import { finalize, interval, switchMap, takeWhile } from 'rxjs';
-
+import { Judge0Service } from '@app/core/services/judge/judge0';
+import {
+  Submission,
+  SubmissionResult,
+} from '@app/core/types/judge0.types';
+import { finalize } from 'rxjs';
 const DEFAULT_MAIN_SIZES = [45, 55] as const;
 const DEFAULT_EDITOR_SIZES = [60, 40] as const;
 const COLLAPSED_MAIN_SIZES = [4, 96] as const;
 const COLLAPSED_EDITOR_SIZES = [6, 94] as const;
 const COLLAPSED_TERMINAL_SIZES = [94, 6] as const;
 
+interface SplitDragEvent {
+  sizes: (number | '*')[];
+}
+
 const DEFAULT_DESCRIPTION = `
-# Problem Statement
+# Hello World
 
-You are given a problem statement and a code editor.
 
-# Code Editor
-
-The code editor is a Monaco editor that allows you to write and edit code.
-
-# Terminal
-
-The terminal is a terminal that allows you to run code and see the output.
-
-\`\`\`bash
-$ npm install
-$ npm run start
-\`\`\`
-
-# Example
-
-Input: 1
-Output: 1
-
-Input: 2
-Output: 2
-
-Input: 3
+### Function declaration
 \`\`\`typescript
-function x() {
-  console.log("Hello world!");
+function hello(): string {
+  return "Hello, World!";
 }
 \`\`\`
+
+### Function call
+\`\`\`typescript
+console.log(hello());
+\`\`\`
+
+### Expected output
+Write a function that returns "Hello, World!".
+
+### Example
+**Output:** \`"Hello, World!"\`
 `;
 
-const DEFAULT_CODE = 'function x() {\n\tconsole.log("Hello world!");\n}';
+const DEFAULT_CODE = `function hello(): string {
+  return "Hello, World!";
+}
+
+console.log(hello());`;
+
+const DEFAULT_EXPECTED_OUTPUT = 'Hello, World!';
 
 /**
- * EditorComponent provides a split-pane interface with a markdown description,
+ * CodexEditorComponent provides a split-pane interface with a markdown description,
  * a Monaco code editor, and a terminal/test cases area.
  */
 @Component({
@@ -78,25 +77,37 @@ const DEFAULT_CODE = 'function x() {\n\tconsole.log("Hello world!");\n}';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class CodexEditorComponent {
-  private readonly judge0 = inject(Judge0);
+  private readonly judge0 = inject(Judge0Service);
 
   // Emits when the editor should be closed.
-  readonly showEditor = output<void>();
+  readonly editorClosed = output<void>();
 
   // Markdown big description content.
-  readonly description = input<string>(DEFAULT_DESCRIPTION);
+  readonly description = signal<string>(DEFAULT_DESCRIPTION);
 
   // Code content in the editor.
-  readonly code = model<string>(DEFAULT_CODE);
+  readonly code = signal<string>(DEFAULT_CODE);
+
+  // Judge0 language ID (TypeScript).
+  readonly languageId = signal<number>(74);
 
   // Split sizes (percentages).
   readonly mainSplitSizes = signal<number[]>([...DEFAULT_MAIN_SIZES]);
+
+  // Split sizes (percentages) for the right side.
   readonly rightSplitSizes = signal<number[]>([...DEFAULT_EDITOR_SIZES]);
 
   // Submission state.
   readonly isSubmitting = signal<boolean>(false);
+
+  // result of the submission.
   readonly submissionResult = signal<SubmissionResult | null>(null);
+
+  // The currently active tab in the terminal.
   readonly terminalTab = signal<'test-cases' | 'result'>('test-cases');
+
+  // The expected output for the submission.
+  readonly expectedOutput = signal<string>(DEFAULT_EXPECTED_OUTPUT);
 
   // State for collapsing sections, derived from split sizes.
   readonly isDescriptionCollapsed = computed(
@@ -120,6 +131,8 @@ export class CodexEditorComponent {
     fontSize: 14,
     automaticLayout: true,
     fontFamily: 'JetBrains Mono, monospace',
+    padding: { top: 15 },
+    fixedOverflowWidgets: true,
   };
 
   // Submits the current code to Judge0 for execution.
@@ -136,41 +149,45 @@ export class CodexEditorComponent {
       this.toggleTerminal();
     }
 
-    const submissionData: CreateSubmissionData = {
-      language_id: '63', // JavaScript
-      source_code: btoa(this.code()),
+    const submissionData: Submission = {
+      language_id: this.languageId(),
+      source_code: this.code(),
+      expected_output: this.expectedOutput(),
     };
 
     this.judge0
-      .createSubmission(submissionData)
-      .pipe(
-        switchMap((response) =>
-          interval(5000).pipe(
-            switchMap(() => this.judge0.getSubmission(response.token)),
-            takeWhile((result) => result.status.id <= 2, true)
-          )
-        ),
-        finalize(() => this.isSubmitting.set(false))
-      )
+      .execute(submissionData)
+      .pipe(finalize(() => this.isSubmitting.set(false)))
       .subscribe({
         next: (result) => {
-          if (result.status.id > 2) {
-            this.submissionResult.set(result);
-          }
-        },
-        error: (err) => {
-          console.error('Failed to execute code:', err);
-          this.isSubmitting.set(false);
-        },
+          this.submissionResult.set(result);
+        }
       });
   }
 
-  closeEditor(): void {
-    this.showEditor.emit();
+  // Emits when the editor should be closed.
+  onEditorClosed(): void {
+    this.editorClosed.emit();
+  }
+
+  // Emits when the active tab changes.
+  onActiveTabChange(tab: 'test-cases' | 'result'): void {
+    this.terminalTab.set(tab);
+  }
+
+  // Emits when the expected output changes.
+  onExpectedOutputChange(output: string): void {
+    this.expectedOutput.set(output);
+  }
+
+  // Emits when the code changes.
+  onCodeChange(code: string): void {
+    this.code.set(code);
   }
 
   // Handles the split drag event.
-  handleSplitDrag(type: 'main' | 'right', { sizes }: { sizes: (number | '*')[] }): void {
+  handleSplitDrag(type: 'main' | 'right', event: SplitDragEvent): void {
+    const { sizes } = event;
     const numericSizes = sizes.map((s) => (typeof s === 'number' ? s : 0));
     const target = type === 'main' ? this.mainSplitSizes : this.rightSplitSizes;
     target.set(numericSizes);

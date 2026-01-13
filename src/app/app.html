@@ -4,6 +4,6 @@
 
 @if (isEditorVisible()) {
   <app-codex-editor
-  (showEditor)="executeToggleEditor()"
+  (editorClosed)="executeToggleEditor()"
   />
 }

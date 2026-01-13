@@ -1,7 +1,8 @@
-import { ChangeDetectionStrategy, Component, input, model, output } from '@angular/core';
-import { SubmissionResult } from '@app/core/models/judge0.model';
+import { ChangeDetectionStrategy, Component, input, output } from '@angular/core';
+import { SubmissionResult } from '@app/core/types/judge0.types';
 import { TerminalTestCasesComponent } from './terminal-test-cases.component';
 import { TerminalResultComponent } from './terminal-result.component';
+import { LucideAngularModule, ClipboardList, Terminal, ChevronDown, ChevronUp } from 'lucide-angular';
 
 /**
  * Terminal component for the Codex Editor.
@@ -9,42 +10,60 @@ import { TerminalResultComponent } from './terminal-result.component';
  */
 @Component({
   selector: 'app-editor-terminal',
-  imports: [TerminalTestCasesComponent, TerminalResultComponent],
+  imports: [TerminalTestCasesComponent, TerminalResultComponent, LucideAngularModule],
   template: `
     <section
-      class="card card-compact h-full overflow-hidden rounded-xl border border-base-300 bg-base-100"
+      class="card card-compact h-full overflow-hidden rounded-xl border border-base-300 bg-base-100 shadow-sm"
     >
       <div
-        class="flex shrink-0 items-center justify-between border-b border-base-300 bg-base-200/50 text-sm font-bold"
+        class="flex shrink-0 items-center justify-between border-b border-base-300 bg-base-200/50 text-sm font-bold px-2"
       >
-        <div role="tablist" class="tabs tabs-bordered tabs-sm px-2">
-          <input
-            type="radio"
-            name="terminal_tabs"
+        <div role="tablist" class="tabs tabs-bordered tabs-sm">
+          <button
+            type="button"
             role="tab"
-            class="tab"
-            aria-label="Test cases"
-            [checked]="activeTab() === 'test-cases'"
-            (change)="onActiveTabChange('test-cases')"
-          />
-          <input
-            type="radio"
-            name="terminal_tabs"
+            class="tab h-10 px-4 transition-all"
+            [class.tab-active]="activeTab() === 'test-cases'"
+            [attr.aria-selected]="activeTab() === 'test-cases'"
+            [attr.aria-controls]="activeTab() === 'test-cases' ? 'terminal-panel' : undefined"
+            (click)="onActiveTabChange('test-cases')"
+          >
+            <span class="flex items-center gap-2">
+              <lucide-icon [name]="TestCasesIcon" class="h-3.5 w-3.5"></lucide-icon>
+              Test Cases
+            </span>
+          </button>
+          <button
+            type="button"
             role="tab"
-            class="tab"
-            aria-label="Result"
-            [checked]="activeTab() === 'result'"
-            (change)="onActiveTabChange('result')"
-          />
+            class="tab h-10 px-4 transition-all"
+            [class.tab-active]="activeTab() === 'result'"
+            [attr.aria-selected]="activeTab() === 'result'"
+            [attr.aria-controls]="activeTab() === 'result' ? 'terminal-panel' : undefined"
+            (click)="onActiveTabChange('result')"
+          >
+            <span class="flex items-center gap-2">
+              <lucide-icon [name]="TerminalIcon" class="h-3.5 w-3.5"></lucide-icon>
+              Result
+            </span>
+          </button>
         </div>
-        <button (click)="onToggleCollapse()" class="btn btn-ghost btn-xs text-base-content/50">
-          <span class="text-lg">{{ isCollapsed() ? '↑' : '↓' }}</span>
+        <button
+          (click)="onToggleCollapse()"
+          class="btn btn-ghost btn-xs text-base-content/30 hover:text-base-content hover:bg-transparent"
+          [attr.aria-label]="isCollapsed() ? 'Expand terminal' : 'Collapse terminal'"
+          [attr.aria-expanded]="!isCollapsed()"
+        >
+          <lucide-icon [name]="isCollapsed() ? ChevronUpIcon : ChevronDownIcon" class="h-4 w-4"></lucide-icon>
         </button>
       </div>
       @if (!isCollapsed()) {
-      <div class="card-body overflow-auto p-4">
+      <div id="terminal-panel" class="card-body overflow-auto p-6" role="tabpanel">
         @if (activeTab() === 'test-cases') {
-        <app-terminal-test-cases />
+        <app-terminal-test-cases
+          [expectedOutput]="expectedOutput()"
+          (expectedOutputChange)="onExpectedOutputChange($event)"
+        />
         } @else {
         <app-terminal-result
           [isSubmitting]="isSubmitting()"
@@ -58,6 +77,11 @@ import { TerminalResultComponent } from './terminal-result.component';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class EditorTerminalComponent {
+  readonly TestCasesIcon = ClipboardList;
+  readonly TerminalIcon = Terminal;
+  readonly ChevronDownIcon = ChevronDown;
+  readonly ChevronUpIcon = ChevronUp;
+
   // Whether the terminal section is collapsed.
   readonly isCollapsed = input.required<boolean>();
 
@@ -67,8 +91,17 @@ export class EditorTerminalComponent {
   // The result of the code submission.
   readonly submissionResult = input<SubmissionResult | null>(null);
 
+  // The expected output for the submission.
+  readonly expectedOutput = input<string>('');
+
+  // Emits when the expected output changes.
+  readonly expectedOutputChange = output<string>();
+
   // The currently active tab.
-  readonly activeTab = model<'test-cases' | 'result'>('test-cases');
+  readonly activeTab = input<'test-cases' | 'result'>('test-cases');
+
+  // Emits when the active tab changes.
+  readonly activeTabChange = output<'test-cases' | 'result'>();
 
   // Emits when the collapse toggle is clicked.
   readonly toggleCollapse = output<void>();
@@ -78,7 +111,13 @@ export class EditorTerminalComponent {
     this.toggleCollapse.emit();
   }
 
+  // Handles the active tab change event.
   onActiveTabChange(event: 'test-cases' | 'result'): void {
-    this.activeTab.set(event);
+    this.activeTabChange.emit(event);
+  }
+
+  // Handles the expected output change event.
+  onExpectedOutputChange(event: string): void {
+    this.expectedOutputChange.emit(event);
   }
 }

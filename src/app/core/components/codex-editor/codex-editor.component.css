@@ -4,13 +4,14 @@
 }
 
 /* Customizing angular-split gutters */
-::ng-deep .as-split-gutter {
+/* Note: ::ng-deep is used here as angular-split doesn't provide a better way to style gutters */
+:host ::ng-deep .as-split-gutter {
   background-color: transparent !important;
   position: relative;
 }
 
 /* Horizontal split gutter (the vertical line) */
-as-split[direction="horizontal"] > ::ng-deep .as-split-gutter::before {
+:host ::ng-deep as-split[direction="horizontal"] > .as-split-gutter::before {
   content: '';
   position: absolute;
   top: 12px;
@@ -23,13 +24,13 @@ as-split[direction="horizontal"] > ::ng-deep .as-split-gutter::before {
   border-radius: 4px;
 }
 
-as-split[direction="horizontal"] > ::ng-deep .as-split-gutter:hover::before {
+:host ::ng-deep as-split[direction="horizontal"] > .as-split-gutter:hover::before {
   background-color: var(--color-base-300);
   width: 4px;
 }
 
 /* Vertical split gutter (the horizontal line) */
-as-split[direction="vertical"] > ::ng-deep .as-split-gutter::before {
+:host ::ng-deep as-split[direction="vertical"] > .as-split-gutter::before {
   content: '';
   position: absolute;
   left: 12px;
@@ -42,7 +43,7 @@ as-split[direction="vertical"] > ::ng-deep .as-split-gutter::before {
   border-radius: 4px;
 }
 
-as-split[direction="vertical"] > ::ng-deep .as-split-gutter:hover::before {
+:host ::ng-deep as-split[direction="vertical"] > .as-split-gutter:hover::before {
   background-color: var(--color-base-300);
   height: 4px;
 }

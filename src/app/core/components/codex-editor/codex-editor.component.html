@@ -5,21 +5,22 @@
   aria-labelledby="editor-title"
 >
   <div
-    class="modal-box relative flex h-full w-full max-w-[1500px] flex-col overflow-hidden border border-base-300 bg-base-200 p-0 shadow-2xl animate-in zoom-in-95 duration-300 md:h-[95vh] md:w-[98vw] md:rounded-xl"
+    class="modal-box relative flex h-full w-full max-w-[1500px] flex-col border border-base-300 bg-base-200 p-0 shadow-2xl animate-in zoom-in-95 duration-300 md:h-[95vh] md:w-[98vw] md:rounded-xl"
   >
     <!-- Header Navbar -->
     <app-editor-header
       [isSubmitting]="isSubmitting()"
-      (closeEditor)="closeEditor()"
+      (closeEditor)="onEditorClosed()"
       (submitCode)="submitCode()"
     />
 
     <!-- Main Content Area -->
-    <main class="relative z-10 flex-1 overflow-hidden p-2">
+    <main class="relative z-10 flex-1 p-3">
       <as-split
         direction="horizontal"
         (dragEnd)="handleSplitDrag('main', $event)"
-        [gutterSize]="8"
+        [gutterSize]="10"
+        class="rounded-xl"
       >
         <!-- Description Section -->
         <as-split-area [size]="mainSplitSizes()[0]" [minSize]="4">
@@ -35,7 +36,7 @@
           <as-split
             direction="vertical"
             (dragEnd)="handleSplitDrag('right', $event)"
-            [gutterSize]="8"
+            [gutterSize]="10"
           >
             <!-- Editor Section -->
             <as-split-area [size]="rightSplitSizes()[0]" [minSize]="6">
@@ -43,6 +44,7 @@
                 [(code)]="code"
                 [isCollapsed]="isEditorCollapsed()"
                 [options]="editorOptions"
+                [fileName]="'solution.ts'"
                 (toggleCollapse)="toggleEditor()"
               />
             </as-split-area>
@@ -50,7 +52,10 @@
             <!-- Terminal / Test cases Section -->
             <as-split-area [size]="rightSplitSizes()[1]" [minSize]="6">
               <app-editor-terminal
-                [(activeTab)]="terminalTab"
+                [activeTab]="terminalTab()"
+                (activeTabChange)="onActiveTabChange($event)"
+                [expectedOutput]="expectedOutput()"
+                (expectedOutputChange)="onExpectedOutputChange($event)"
                 [isCollapsed]="isTerminalCollapsed()"
                 [isSubmitting]="isSubmitting()"
                 [submissionResult]="submissionResult()"

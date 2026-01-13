@@ -8,6 +8,7 @@ import {
 } from '@angular/core';
 import { isPlatformBrowser } from '@angular/common';
 import { MarkdownModule } from 'ngx-markdown';
+import { LucideAngularModule, Info, ArrowRight, ArrowLeft } from 'lucide-angular';
 import ClipboardJS from 'clipboard';
 
 /**
@@ -16,7 +17,7 @@ import ClipboardJS from 'clipboard';
  */
 @Component({
   selector: 'app-editor-description',
-  imports: [MarkdownModule],
+  imports: [MarkdownModule, LucideAngularModule],
   changeDetection: ChangeDetectionStrategy.OnPush,
   styles: `
     .custom-scrollbar::-webkit-scrollbar {
@@ -36,7 +37,7 @@ import ClipboardJS from 'clipboard';
   `,
   template: `
     <section
-      class="card card-compact h-full overflow-hidden rounded-xl border border-base-300 bg-base-100"
+      class="card card-compact h-full overflow-hidden rounded-xl border border-base-300 bg-base-100 shadow-sm"
     >
       <div
         class="flex shrink-0 items-center border-b border-base-300 bg-base-200/50 text-sm font-bold"
@@ -44,28 +45,30 @@ import ClipboardJS from 'clipboard';
         [class.justify-center]="isCollapsed()"
       >
         @if (!isCollapsed()) {
-        <span class="flex items-center gap-2 px-5 py-2 tracking-wide opacity-70">
-          Description
+        <span class="flex items-center gap-2 px-5 py-2 tracking-wide opacity-50 uppercase text-[10px]">
+          <lucide-icon [name]="InfoIcon" class="h-4 w-4"></lucide-icon>
+          Problem Description
         </span>
         }
         <button
           (click)="onToggleCollapse()"
-          class="btn btn-ghost btn-xs text-base-content/50"
+          class="btn btn-ghost btn-xs text-base-content/30 hover:text-base-content hover:bg-transparent"
           [class.mt-2]="isCollapsed()"
-          [title]="isCollapsed() ? 'Expand' : 'Collapse'"
+          [attr.aria-label]="isCollapsed() ? 'Expand description' : 'Collapse description'"
+          [attr.aria-expanded]="!isCollapsed()"
         >
-          <span class="text-lg">{{ isCollapsed() ? '→' : '←' }}</span>
+          <lucide-icon [name]="isCollapsed() ? ArrowRightIcon : ArrowLeftIcon" class="h-4 w-4"></lucide-icon>
         </button>
       </div>
 
       @if (!isCollapsed()) {
-      <div class="card-body custom-scrollbar overflow-y-auto p-6 leading-relaxed">
+      <div class="card-body custom-scrollbar overflow-y-auto p-8 leading-relaxed">
         <markdown
           lineNumbers
           lineHighlight
           clipboard
           [data]="content()"
-          class="prose prose-sm max-w-none"
+          class="prose prose-sm max-w-none prose-headings:border-b prose-headings:pb-2 prose-headings:mt-6 first:prose-headings:mt-0"
         />
       </div>
       }
@@ -73,6 +76,10 @@ import ClipboardJS from 'clipboard';
   `,
 })
 export class EditorDescriptionComponent {
+  readonly InfoIcon = Info;
+  readonly ArrowRightIcon = ArrowRight;
+  readonly ArrowLeftIcon = ArrowLeft;
+
   // hack
   constructor() {
     if (isPlatformBrowser(inject(PLATFORM_ID))) {

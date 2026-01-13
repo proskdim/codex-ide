@@ -10,6 +10,7 @@ import {
 import { isPlatformBrowser } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { MonacoEditorModule } from 'ngx-monaco-editor-v2';
+import { LucideAngularModule, Code, ChevronDown, ChevronUp } from 'lucide-angular';
 
 // Represents the Monaco editor instance layout method.
 interface MonacoEditor {
@@ -24,6 +25,7 @@ interface MonacoEditorOptions {
   fontSize: number;
   automaticLayout: boolean;
   fontFamily: string;
+  padding?: { top?: number; bottom?: number };
 }
 
 /**
@@ -32,20 +34,28 @@ interface MonacoEditorOptions {
  */
 @Component({
   selector: 'app-editor-code',
-  imports: [MonacoEditorModule, FormsModule],
+  imports: [MonacoEditorModule, FormsModule, LucideAngularModule],
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
     <section
-      class="card card-compact h-full overflow-hidden rounded-xl border border-base-300 bg-base-100"
+      class="card card-compact h-full rounded-xl border border-base-300 bg-base-100 shadow-sm flex flex-col"
     >
       <div
-        class="flex shrink-0 items-center border-b border-base-300 bg-base-200/50 text-sm font-bold justify-between"
+        class="flex shrink-0 items-center border-b border-base-300 bg-base-200/50 text-sm font-bold justify-between px-4 py-1"
       >
-        <span class="flex items-center gap-2 px-5 py-2 tracking-wide opacity-70">
-          solution.ts
-        </span>
-        <button (click)="onToggleCollapse()" class="btn btn-ghost btn-xs text-base-content/50">
-          <span class="text-lg">{{ isCollapsed() ? '↓' : '↑' }}</span>
+        <div class="flex items-center gap-3">
+          <lucide-icon [name]="CodeIcon" class="h-4 w-4 opacity-40"></lucide-icon>
+          <span class="flex items-center gap-2 py-1 tracking-wide opacity-50 font-mono text-xs">
+            {{ fileName() }}
+          </span>
+        </div>
+        <button
+          (click)="onToggleCollapse()"
+          class="btn btn-ghost btn-xs text-base-content/30 hover:text-base-content hover:bg-transparent"
+          [attr.aria-label]="isCollapsed() ? 'Expand editor' : 'Collapse editor'"
+          [attr.aria-expanded]="!isCollapsed()"
+        >
+          <lucide-icon [name]="isCollapsed() ? ChevronDownIcon : ChevronUpIcon" class="h-4 w-4"></lucide-icon>
         </button>
       </div>
       <div class="min-h-0 flex-1">
@@ -63,8 +73,15 @@ interface MonacoEditorOptions {
   `,
 })
 export class EditorCodeComponent {
+  readonly CodeIcon = Code;
+  readonly ChevronDownIcon = ChevronDown;
+  readonly ChevronUpIcon = ChevronUp;
+
   // Code content in the editor.
   readonly code = model.required<string>();
+
+  // File name to display.
+  readonly fileName = input<string>('solution.ts');
 
   // Whether the editor section is collapsed.
   readonly isCollapsed = input.required<boolean>();

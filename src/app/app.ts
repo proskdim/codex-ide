@@ -1,6 +1,6 @@
 import { ChangeDetectionStrategy, Component, inject, signal } from '@angular/core';
 import { CodexEditorComponent } from '@codex-editor/codex-editor.component';
-import { Judge0 } from './core/services/judge0';
+import { Judge0Service } from './core/services/judge/judge0';
 
 @Component({
   selector: 'app-root',
@@ -10,7 +10,7 @@ import { Judge0 } from './core/services/judge0';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class App {
-  readonly judge0 = inject(Judge0);
+  readonly judge0 = inject(Judge0Service);
 
   readonly isEditorVisible = signal(true);
 
