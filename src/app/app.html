@@ -3,7 +3,7 @@
 <button (click)="executeToggleEditor()">Open editor</button>
 
 @if (isEditorVisible()) {
-  <app-codex-editor
+  <app-editor-layout
   (editorClosed)="executeToggleEditor()"
   />
 }

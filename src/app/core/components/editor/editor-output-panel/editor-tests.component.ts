@@ -6,13 +6,16 @@ import { LucideAngularModule, Info } from 'lucide-angular';
  * Component for displaying and managing test cases in the terminal.
  */
 @Component({
-  selector: 'app-terminal-test-cases',
+  selector: 'app-editor-output-tests',
   imports: [FormsModule, LucideAngularModule],
   template: `
     <div class="flex flex-col gap-4">
       <div class="flex items-center gap-2">
         <span class="text-xs font-bold uppercase opacity-50">Expected Output</span>
-        <div class="tooltip tooltip-right tooltip-primary" data-tip="The output your code is expected to produce">
+        <div
+          class="tooltip tooltip-right tooltip-primary"
+          data-tip="The output your code is expected to produce"
+        >
           <lucide-icon [name]="InfoIcon" class="h-4 w-4 opacity-30"></lucide-icon>
         </div>
       </div>
@@ -30,7 +33,8 @@ import { LucideAngularModule, Info } from 'lucide-angular';
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class TerminalTestCasesComponent {
+export class EditorOutputTestsComponent {
+  // Info icon.
   readonly InfoIcon = Info;
 
   // The expected output for the submission.

@@ -7,7 +7,7 @@ import { LucideAngularModule, Clock, Cpu, CheckCircle } from 'lucide-angular';
  * Component for displaying the execution result in the terminal.
  */
 @Component({
-  selector: 'app-terminal-result',
+  selector: 'app-editor-output-result',
   imports: [LucideAngularModule],
   template: `
     @if (isSubmitting()) {
@@ -60,7 +60,9 @@ import { LucideAngularModule, Clock, Cpu, CheckCircle } from 'lucide-angular';
       </div>
       } @if (result.stdout) {
       <div class="space-y-2">
-        <p class="text-[10px] font-black uppercase tracking-wider opacity-40 text-primary">Standard Output</p>
+        <p class="text-[10px] font-black uppercase tracking-wider opacity-40 text-primary">
+          Standard Output
+        </p>
         <div class="bg-primary/5 text-primary rounded-lg p-4 shadow-inner border border-primary/20">
           <pre
             class="font-mono text-xs leading-relaxed"
@@ -90,7 +92,7 @@ import { LucideAngularModule, Clock, Cpu, CheckCircle } from 'lucide-angular';
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class TerminalResultComponent {
+export class EditorOutputResultComponent {
   private readonly submissionService = inject(SubmissionService);
 
   readonly ClockIcon = Clock;

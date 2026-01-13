@@ -21,8 +21,8 @@
       "@components/*": [
         "./src/app/core/components/*"
       ],
-      "@codex-editor/*": [
-        "./src/app/core/components/codex-editor/*"
+      "@editor/*": [
+        "./src/app/core/components/editor/*"
       ],
       "@environments/*": [
         "./src/environments/*"

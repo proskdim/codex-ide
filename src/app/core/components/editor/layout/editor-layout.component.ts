@@ -8,10 +8,10 @@ import {
   viewChild,
 } from '@angular/core';
 import { AngularSplitModule } from 'angular-split';
-import { EditorHeaderComponent } from '@codex-editor/editor-header.component';
-import { EditorDescriptionComponent } from '@codex-editor/editor-description.component';
-import { EditorCodeComponent } from '@codex-editor/editor-code.component';
-import { EditorTerminalComponent } from '@codex-editor/editor-terminal.component';
+import { EditorNavbarComponent } from '@app/core/components/editor/editor-navbar.component';
+import { EditorTaskDescriptionComponent } from '@app/core/components/editor/editor-task-description.component';
+import { EditorCodeComponent } from '@editor/editor-code.component';
+import { EditorOutputPanelComponent } from '@app/core/components/editor/editor-output-panel/editor-output-panel.component';
 import { SubmissionService } from '@app/core/services/submission.service';
 import { Submission } from '@app/core/types/judge0.types';
 const DEFAULT_MAIN_SIZES = [45, 55] as const;
@@ -56,23 +56,23 @@ console.log(hello());`;
 const DEFAULT_EXPECTED_OUTPUT = 'Hello, World!';
 
 /**
- * CodexEditorComponent provides a split-pane interface with a markdown description,
+ * EditorLayoutComponent provides a split-pane interface with a markdown description,
  * a Monaco code editor, and a terminal/test cases area.
  */
 @Component({
-  selector: 'app-codex-editor',
+  selector: 'app-editor-layout',
   imports: [
     AngularSplitModule,
-    EditorHeaderComponent,
-    EditorDescriptionComponent,
+    EditorNavbarComponent,
+    EditorTaskDescriptionComponent,
     EditorCodeComponent,
-    EditorTerminalComponent,
+    EditorOutputPanelComponent,
   ],
-  templateUrl: './codex-editor.component.html',
-  styleUrl: './codex-editor.component.css',
+  templateUrl: './editor-layout.component.html',
+  styleUrl: './editor-layout.component.css',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class CodexEditorComponent {
+export class EditorLayoutComponent {
   private readonly submissionService = inject(SubmissionService);
 
   // Submission state.

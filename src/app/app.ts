@@ -1,10 +1,10 @@
 import { ChangeDetectionStrategy, Component, inject, signal } from '@angular/core';
-import { CodexEditorComponent } from '@codex-editor/codex-editor.component';
+import { EditorLayoutComponent } from '@editor/layout/editor-layout.component';
 import { Judge0Service } from './core/services/judge/judge0';
 
 @Component({
   selector: 'app-root',
-  imports: [CodexEditorComponent],
+  imports: [EditorLayoutComponent],
   templateUrl: './app.html',
   styleUrl: './app.css',
   changeDetection: ChangeDetectionStrategy.OnPush,

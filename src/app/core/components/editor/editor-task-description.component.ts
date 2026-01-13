@@ -16,7 +16,7 @@ import ClipboardJS from 'clipboard';
  * Displays markdown content and handles collapse/expand.
  */
 @Component({
-  selector: 'app-editor-description',
+  selector: 'app-editor-task-description',
   imports: [MarkdownModule, LucideAngularModule],
   changeDetection: ChangeDetectionStrategy.OnPush,
   styles: `
@@ -45,7 +45,9 @@ import ClipboardJS from 'clipboard';
         [class.justify-center]="isCollapsed()"
       >
         @if (!isCollapsed()) {
-        <span class="flex items-center gap-2 px-5 py-2 tracking-wide opacity-50 uppercase text-[10px]">
+        <span
+          class="flex items-center gap-2 px-5 py-2 tracking-wide opacity-50 uppercase text-[10px]"
+        >
           <lucide-icon [name]="InfoIcon" class="h-4 w-4"></lucide-icon>
           Problem Description
         </span>
@@ -57,7 +59,10 @@ import ClipboardJS from 'clipboard';
           [attr.aria-label]="isCollapsed() ? 'Expand description' : 'Collapse description'"
           [attr.aria-expanded]="!isCollapsed()"
         >
-          <lucide-icon [name]="isCollapsed() ? ArrowRightIcon : ArrowLeftIcon" class="h-4 w-4"></lucide-icon>
+          <lucide-icon
+            [name]="isCollapsed() ? ArrowRightIcon : ArrowLeftIcon"
+            class="h-4 w-4"
+          ></lucide-icon>
         </button>
       </div>
 
@@ -75,7 +80,7 @@ import ClipboardJS from 'clipboard';
     </section>
   `,
 })
-export class EditorDescriptionComponent {
+export class EditorTaskDescriptionComponent {
   readonly InfoIcon = Info;
   readonly ArrowRightIcon = ArrowRight;
   readonly ArrowLeftIcon = ArrowLeft;
