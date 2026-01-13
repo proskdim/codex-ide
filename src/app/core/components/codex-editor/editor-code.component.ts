@@ -38,7 +38,7 @@ interface MonacoEditorOptions {
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
     <section
-      class="card card-compact h-full rounded-xl border border-base-300 bg-base-100 shadow-sm flex flex-col"
+      class="card card-compact h-full rounded-xl overflow-hidden border border-base-300 bg-base-100 shadow-sm flex flex-col"
     >
       <div
         class="flex shrink-0 items-center border-b border-base-300 bg-base-200/50 text-sm font-bold justify-between px-4 py-1"
