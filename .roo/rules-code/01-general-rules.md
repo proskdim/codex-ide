@@ -31,6 +31,6 @@ Ensure code is complete!
 4. Formatting & Documentation:
     - Use 1 blank line between methods/logical blocks.
     - Do not create "walls of text", BUT...
-    - ALWAYS add a single-line comment above every function/method definition describing its intent.
+    - ALWAYS add a single-line comment above every function/method definition describing its intent and class fields.
     - NEVER delete existing comments unless the related code is removed.
     - Prioritize code clarity over extreme brevity.

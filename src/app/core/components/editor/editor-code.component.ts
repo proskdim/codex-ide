@@ -79,28 +79,24 @@ interface MonacoEditorOptions {
   `,
 })
 export class EditorCodeComponent {
+  // Code icon.
   readonly CodeIcon = Code;
+  // Chevron down icon.
   readonly ChevronDownIcon = ChevronDown;
+  // Chevron up icon.
   readonly ChevronUpIcon = ChevronUp;
-
   // Code content in the editor.
   readonly code = model.required<string>();
-
   // File name to display.
   readonly fileName = input<string>('solution.ts');
-
   // Whether the editor section is collapsed.
   readonly isCollapsed = input.required<boolean>();
-
   // Monaco editor configuration options.
   readonly options = input.required<MonacoEditorOptions>();
-
   // Emits when the collapse toggle is clicked.
   readonly toggleCollapse = output<void>();
-
   // Whether the component is running in a browser environment.
   protected readonly isBrowser = isPlatformBrowser(inject(PLATFORM_ID));
-
   // Stores the editor instance.
   private editorInstance?: MonacoEditor;
 
@@ -114,10 +110,12 @@ export class EditorCodeComponent {
     this.editorInstance?.layout();
   }
 
+  // Handles the collapse toggle click event.
   onToggleCollapse(): void {
     this.toggleCollapse.emit();
   }
 
+  // Handles the model change event.
   onModelChange(event: string): void {
     this.code.set(event);
   }

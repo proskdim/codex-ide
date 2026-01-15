@@ -36,10 +36,8 @@ import { LucideAngularModule, Info } from 'lucide-angular';
 export class EditorOutputTestsComponent {
   // Info icon.
   readonly InfoIcon = Info;
-
   // The expected output for the submission.
   readonly expectedOutput = input<string>('');
-
   // Emits when the expected output changes.
   readonly expectedOutputChange = output<string>();
 

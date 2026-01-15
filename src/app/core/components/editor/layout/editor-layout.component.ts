@@ -73,38 +73,28 @@ const DEFAULT_EXPECTED_OUTPUT = 'Hello, World!';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class EditorLayoutComponent {
+  // Submission service.
   private readonly submissionService = inject(SubmissionService);
-
   // Submission state.
   readonly isSubmitting = this.submissionService.isSubmitting;
-
   // result of the submission.
   readonly submissionResult = this.submissionService.submissionResult;
-
   // Emits when the editor should be closed.
   readonly editorClosed = output<void>();
-
   // Markdown big description content.
   readonly description = signal<string>(DEFAULT_DESCRIPTION);
-
   // Code content in the editor.
   readonly code = signal<string>(DEFAULT_CODE);
-
   // Judge0 language ID (TypeScript).
   readonly languageId = signal<number>(74);
-
   // Split sizes (percentages).
   readonly mainSplitSizes = signal<number[]>([...DEFAULT_MAIN_SIZES]);
-
   // Split sizes (percentages) for the right side.
   readonly rightSplitSizes = signal<number[]>([...DEFAULT_EDITOR_SIZES]);
-
   // The currently active tab in the terminal.
   readonly terminalTab = signal<'test-cases' | 'result'>('test-cases');
-
   // The expected output for the submission.
   readonly expectedOutput = signal<string>(DEFAULT_EXPECTED_OUTPUT);
-
   // State for collapsing sections, derived from split sizes.
   readonly isDescriptionCollapsed = computed(
     () => this.mainSplitSizes()[0] <= COLLAPSED_MAIN_SIZES[0] + 0.5

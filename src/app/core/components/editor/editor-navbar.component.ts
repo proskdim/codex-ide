@@ -59,10 +59,8 @@ export class EditorNavbarComponent {
   readonly PlayIcon = Play;
   // Whether the code is currently being submitted.
   readonly isSubmitting = input<boolean>(false);
-
   // Emits when the close button is clicked.
   readonly closeEditor = output<void>();
-
   // Emits when the submit button is clicked.
   readonly runCode = output<void>();
 

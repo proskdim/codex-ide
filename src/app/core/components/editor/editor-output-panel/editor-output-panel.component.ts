@@ -1,6 +1,6 @@
 import { ChangeDetectionStrategy, Component, input, output } from '@angular/core';
 import { EditorOutputTestsComponent } from './editor-tests.component';
-import { EditorOutputResultComponent } from './editor-output-result.component';
+import { EditorOutputResultsComponent } from './editor-output-result.component';
 import {
   LucideAngularModule,
   ClipboardList,
@@ -15,7 +15,7 @@ import {
  */
 @Component({
   selector: 'app-editor-output-panel',
-  imports: [EditorOutputTestsComponent, EditorOutputResultComponent, LucideAngularModule],
+  imports: [EditorOutputTestsComponent, LucideAngularModule, EditorOutputResultsComponent],
   template: `
     <section
       class="card card-compact h-full overflow-hidden rounded-xl border border-base-300 bg-base-100 shadow-sm"
@@ -73,7 +73,7 @@ import {
           (expectedOutputChange)="onExpectedOutputChange($event)"
         />
         } @else {
-        <app-editor-output-result />
+        <app-editor-output-results />
         }
       </div>
       }
@@ -84,31 +84,22 @@ import {
 export class EditorOutputPanelComponent {
   // Test cases icon.
   readonly TestCasesIcon = ClipboardList;
-
   // Terminal icon.
   readonly TerminalIcon = Terminal;
-
   // Chevron down icon.
   readonly ChevronDownIcon = ChevronDown;
-
   // Chevron up icon.
   readonly ChevronUpIcon = ChevronUp;
-
   // Whether the terminal section is collapsed.
   readonly isCollapsed = input.required<boolean>();
-
   // The expected output for the submission.
   readonly expectedOutput = input<string>('');
-
   // Emits when the expected output changes.
   readonly expectedOutputChange = output<string>();
-
   // The currently active tab.
   readonly activeTab = input<'test-cases' | 'result'>('test-cases');
-
   // Emits when the active tab changes.
   readonly activeTabChange = output<'test-cases' | 'result'>();
-
   // Emits when the collapse toggle is clicked.
   readonly toggleCollapse = output<void>();
 

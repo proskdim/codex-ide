@@ -83,10 +83,8 @@ import ClipboardJS from 'clipboard';
 export class EditorTaskDescriptionComponent {
   // Info icon.
   readonly InfoIcon = Info;
-
   // Arrow right icon.
   readonly ArrowRightIcon = ArrowRight;
-
   // Arrow left icon.
   readonly ArrowLeftIcon = ArrowLeft;
 
@@ -99,13 +97,12 @@ export class EditorTaskDescriptionComponent {
 
   // Markdown content to display.
   readonly content = input.required<string>();
-
   // Whether the description section is collapsed.
   readonly isCollapsed = input.required<boolean>();
-
   // Emits when the collapse toggle is clicked.
   readonly toggleCollapse = output<void>();
 
+  // Handles the collapse toggle click event.
   onToggleCollapse(): void {
     this.toggleCollapse.emit();
   }
