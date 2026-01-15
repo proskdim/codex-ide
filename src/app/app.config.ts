@@ -1,9 +1,13 @@
-import { ApplicationConfig, provideBrowserGlobalErrorListeners } from '@angular/core';
+import {
+  ApplicationConfig,
+  provideBrowserGlobalErrorListeners,
+  SecurityContext,
+} from '@angular/core';
 import { provideRouter } from '@angular/router';
 import { provideHttpClient, withFetch } from '@angular/common/http';
 import { provideClientHydration, withEventReplay } from '@angular/platform-browser';
 import { provideMonacoEditor } from 'ngx-monaco-editor-v2';
-import { provideMarkdown } from 'ngx-markdown';
+import { provideMarkdown, MARKED_OPTIONS, SANITIZE } from 'ngx-markdown';
 import { routes } from './app.routes';
 
 export const appConfig: ApplicationConfig = {
@@ -13,6 +17,19 @@ export const appConfig: ApplicationConfig = {
     provideHttpClient(withFetch()),
     provideClientHydration(withEventReplay()),
     provideMonacoEditor(),
-    provideMarkdown(),
+    provideMarkdown({
+      sanitize: {
+        provide: SANITIZE,
+        useValue: SecurityContext.NONE,
+      },
+      markedOptions: {
+        provide: MARKED_OPTIONS,
+        useValue: {
+          gfm: true,
+          breaks: false,
+          pedantic: false,
+        },
+      },
+    }),
   ],
 };

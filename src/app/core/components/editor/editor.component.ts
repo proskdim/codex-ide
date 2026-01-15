@@ -8,11 +8,11 @@ import {
   viewChild,
 } from '@angular/core';
 import { AngularSplitModule } from 'angular-split';
-import { EditorNavbarComponent } from '@app/core/components/editor/editor-navbar.component';
-import { EditorTaskDescriptionComponent } from '@app/core/components/editor/editor-task-description.component';
-import { EditorCodeComponent } from '@editor/editor-code.component';
-import { EditorOutputPanelComponent } from '@app/core/components/editor/editor-output-panel/editor-output-panel.component';
-import { SubmissionService } from '@app/core/services/submission.service';
+import { EditorNavComponent } from '@editor/parts/editor-nav.component';
+import { EditorDescComponent } from '@editor/parts/editor-desc.component';
+import { EditorCodeComponent } from '@editor/parts/editor-code.component';
+import { EditorPanelComponent } from '@editor/parts/shell/editor-panel.component';
+import { SubmissionService } from '@services/submission.service';
 import { Judge0Request } from '@app/core/types/judge0.types';
 const DEFAULT_MAIN_SIZES = [45, 55] as const;
 const DEFAULT_EDITOR_SIZES = [60, 40] as const;
@@ -60,19 +60,19 @@ const DEFAULT_EXPECTED_OUTPUT = 'Hello, World!';
  * a Monaco code editor, and a terminal/test cases area.
  */
 @Component({
-  selector: 'app-editor-layout',
+  selector: 'app-editor',
   imports: [
     AngularSplitModule,
-    EditorNavbarComponent,
-    EditorTaskDescriptionComponent,
+    EditorNavComponent,
+    EditorDescComponent,
     EditorCodeComponent,
-    EditorOutputPanelComponent,
+    EditorPanelComponent,
   ],
-  templateUrl: './editor-layout.component.html',
-  styleUrl: './editor-layout.component.css',
+  templateUrl: './editor.component.html',
+  styleUrl: './editor.component.css',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class EditorLayoutComponent {
+export class EditorComponent {
   // Submission service.
   private readonly submissionService = inject(SubmissionService);
   // Submission state.

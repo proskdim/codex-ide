@@ -16,7 +16,7 @@ import ClipboardJS from 'clipboard';
  * Displays markdown content and handles collapse/expand.
  */
 @Component({
-  selector: 'app-editor-task-description',
+  selector: 'app-editor-desc',
   imports: [MarkdownModule, LucideAngularModule],
   changeDetection: ChangeDetectionStrategy.OnPush,
   styles: `
@@ -73,6 +73,7 @@ import ClipboardJS from 'clipboard';
           lineHighlight
           clipboard
           [data]="content()"
+          [disableSanitizer]="true"
           class="prose prose-sm max-w-none prose-headings:border-b prose-headings:pb-2 prose-headings:mt-6 first:prose-headings:mt-0"
         />
       </div>
@@ -80,7 +81,7 @@ import ClipboardJS from 'clipboard';
     </section>
   `,
 })
-export class EditorTaskDescriptionComponent {
+export class EditorDescComponent {
   // Info icon.
   readonly InfoIcon = Info;
   // Arrow right icon.

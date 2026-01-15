@@ -6,7 +6,7 @@ import { LucideAngularModule, Info } from 'lucide-angular';
  * Component for displaying and managing test cases in the terminal.
  */
 @Component({
-  selector: 'app-editor-output-tests',
+  selector: 'app-editor-output',
   imports: [FormsModule, LucideAngularModule],
   template: `
     <div class="flex flex-col gap-4">
@@ -33,7 +33,7 @@ import { LucideAngularModule, Info } from 'lucide-angular';
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class EditorOutputTestsComponent {
+export class EditorOutputComponent {
   // Info icon.
   readonly InfoIcon = Info;
   // The expected output for the submission.

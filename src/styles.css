@@ -10,3 +10,33 @@
   font-weight: normal;
   font-style: normal;
 }
+
+/* Prevent Tailwind Typography from conflicting with PrismJS styles */
+.prose pre {
+  background-color: #fafafa !important; /* Match Prism one-light theme background */
+  color: #90a4ae !important; /* Match Prism one-light theme text color */
+  font-family: "JetBrains Mono", monospace !important;
+  margin: 0.5em 0 !important;
+}
+
+/* Allow Prism plugins (like line-numbers) to set their own padding */
+.prose pre:not(.line-numbers) {
+  padding: 1.25em 1em !important;
+}
+
+.prose pre.line-numbers {
+  padding: 1.25em 1em 1.25em 3.8em !important;
+}
+
+/* Only override code styles inside pre blocks to avoid breaking inline code */
+.prose pre code {
+  background-color: transparent !important;
+  padding: 0 !important;
+  color: inherit !important;
+  font-family: inherit !important;
+}
+
+.prose pre code::before,
+.prose pre code::after {
+  content: "" !important;
+}

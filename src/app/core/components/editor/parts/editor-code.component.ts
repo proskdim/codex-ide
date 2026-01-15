@@ -61,7 +61,10 @@ interface MonacoEditorOptions {
           [attr.aria-label]="isCollapsed() ? 'Expand editor' : 'Collapse editor'"
           [attr.aria-expanded]="!isCollapsed()"
         >
-          <lucide-icon [name]="isCollapsed() ? ChevronDownIcon : ChevronUpIcon" class="h-4 w-4"></lucide-icon>
+          <lucide-icon
+            [name]="isCollapsed() ? ChevronDownIcon : ChevronUpIcon"
+            class="h-4 w-4"
+          ></lucide-icon>
         </button>
       </div>
       <div class="min-h-0 flex-1">

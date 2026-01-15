@@ -8,7 +8,7 @@
     class="modal-box relative flex h-full w-full max-w-[1500px] flex-col border border-base-300 bg-base-200 p-0 shadow-2xl animate-in zoom-in-95 duration-300 md:h-[95vh] md:w-[98vw] md:rounded-xl"
   >
     <!-- Header Navbar -->
-    <app-editor-navbar
+    <app-editor-nav
       [isSubmitting]="isSubmitting()"
       (closeEditor)="onEditorClosed()"
       (runCode)="onRunCode()"
@@ -24,7 +24,7 @@
       >
         <!-- Description Section -->
         <as-split-area [size]="mainSplitSizes()[0]" [minSize]="4">
-          <app-editor-task-description
+          <app-editor-desc
             [content]="description()"
             [isCollapsed]="isDescriptionCollapsed()"
             (toggleCollapse)="toggleDescription()"
@@ -51,7 +51,7 @@
 
             <!-- Terminal / Test cases Section -->
             <as-split-area [size]="rightSplitSizes()[1]" [minSize]="6">
-              <app-editor-output-panel
+              <app-editor-panel
                 [activeTab]="terminalTab()"
                 (activeTabChange)="onActiveTabChange($event)"
                 [expectedOutput]="expectedOutput()"

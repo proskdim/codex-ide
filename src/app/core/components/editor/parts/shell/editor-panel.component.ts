@@ -1,6 +1,6 @@
 import { ChangeDetectionStrategy, Component, input, output } from '@angular/core';
-import { EditorOutputTestsComponent } from './editor-tests.component';
-import { EditorOutputResultsComponent } from './editor-output-result.component';
+import { EditorOutputComponent } from './editor-output.component';
+import { EditorResultsComponent } from './editor-result.component';
 import {
   LucideAngularModule,
   ClipboardList,
@@ -14,8 +14,8 @@ import {
  * Displays test cases and results, and handles collapse/expand.
  */
 @Component({
-  selector: 'app-editor-output-panel',
-  imports: [EditorOutputTestsComponent, LucideAngularModule, EditorOutputResultsComponent],
+  selector: 'app-editor-panel',
+  imports: [EditorOutputComponent, LucideAngularModule, EditorResultsComponent],
   template: `
     <section
       class="card card-compact h-full overflow-hidden rounded-xl border border-base-300 bg-base-100 shadow-sm"
@@ -68,12 +68,12 @@ import {
       @if (!isCollapsed()) {
       <div id="terminal-panel" class="card-body overflow-auto p-6" role="tabpanel">
         @if (activeTab() === 'test-cases') {
-        <app-editor-output-tests
+        <app-editor-output
           [expectedOutput]="expectedOutput()"
           (expectedOutputChange)="onExpectedOutputChange($event)"
         />
         } @else {
-        <app-editor-output-results />
+        <app-editor-results />
         }
       </div>
       }
@@ -81,7 +81,7 @@ import {
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class EditorOutputPanelComponent {
+export class EditorPanelComponent {
   // Test cases icon.
   readonly TestCasesIcon = ClipboardList;
   // Terminal icon.

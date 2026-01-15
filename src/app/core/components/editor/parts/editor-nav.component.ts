@@ -6,7 +6,7 @@ import { LucideAngularModule, X, Play } from 'lucide-angular';
  * Provides actions for closing the editor and submitting code.
  */
 @Component({
-  selector: 'app-editor-navbar',
+  selector: 'app-editor-nav',
   imports: [LucideAngularModule],
   template: `
     <nav
@@ -52,7 +52,7 @@ import { LucideAngularModule, X, Play } from 'lucide-angular';
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class EditorNavbarComponent {
+export class EditorNavComponent {
   // X Icon
   readonly XIcon = X;
   // Play Icon

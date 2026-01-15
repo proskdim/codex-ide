@@ -1,5 +1,5 @@
 import { ChangeDetectionStrategy, Component, computed, inject, input } from '@angular/core';
-import { SubmissionService } from '@app/core/services/submission.service';
+import { SubmissionService } from '@services/submission.service';
 import { JUDGE0_STATUS, Judge0Response } from '@app/core/types/judge0.types';
 import { LucideAngularModule, Clock, Cpu } from 'lucide-angular';
 import { Base64DecodePipe } from '@app/shared/pipes/base64-decode.pipe';
@@ -7,7 +7,7 @@ import { Base64DecodePipe } from '@app/shared/pipes/base64-decode.pipe';
  * Component for displaying the loading state.
  */
 @Component({
-  selector: 'app-editor-output-loading',
+  selector: 'app-editor-loading',
   imports: [LucideAngularModule],
   template: `
     <div class="flex flex-col items-center justify-center py-12 text-base-content/50">
@@ -17,13 +17,13 @@ import { Base64DecodePipe } from '@app/shared/pipes/base64-decode.pipe';
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class EditorOutputLoadingComponent {}
+export class EditorLoadingComponent {}
 
 /**
  * Component for displaying the "no results" state.
  */
 @Component({
-  selector: 'app-editor-no-results',
+  selector: 'app-editor-no-result',
   imports: [LucideAngularModule],
   template: `
     <div
@@ -34,13 +34,13 @@ export class EditorOutputLoadingComponent {}
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class EditorNoResultsComponent {}
+export class EditorNoResultComponent {}
 
 /**
  * Component for displaying the execution details (stdout, stderr, compile_output, message).
  */
 @Component({
-  selector: 'app-editor-output-details',
+  selector: 'app-editor-details',
   imports: [Base64DecodePipe],
   template: `
     @switch (statusId()) { @case (JUDGE0_STATUS.COMPILATION_ERROR) {
@@ -87,7 +87,7 @@ export class EditorNoResultsComponent {}
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class EditorOutputDetailsComponent {
+export class EditorDetailsComponent {
   // Judge0 status enum.
   readonly JUDGE0_STATUS = JUDGE0_STATUS;
   // The result of the code submission.
@@ -108,8 +108,8 @@ export class EditorOutputDetailsComponent {
  * Component for displaying the execution result header and details.
  */
 @Component({
-  selector: 'app-editor-output-result',
-  imports: [LucideAngularModule, EditorOutputDetailsComponent],
+  selector: 'app-editor-result',
+  imports: [LucideAngularModule, EditorDetailsComponent],
   template: `
     <div class="space-y-6 flex flex-col">
       <div
@@ -146,12 +146,12 @@ export class EditorOutputDetailsComponent {
         </div>
       </div>
 
-      <app-editor-output-details [result]="result()" />
+      <app-editor-details [result]="result()" />
     </div>
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class EditorOutputResultComponent {
+export class EditorResultComponent {
   // The result of the code submission.
   readonly result = input.required<Judge0Response>();
   // Clock icon.
@@ -174,20 +174,20 @@ export class EditorOutputResultComponent {
  * Main container component for the output panel.
  */
 @Component({
-  selector: 'app-editor-output-results',
-  imports: [EditorOutputLoadingComponent, EditorNoResultsComponent, EditorOutputResultComponent],
+  selector: 'app-editor-results',
+  imports: [EditorLoadingComponent, EditorNoResultComponent, EditorResultComponent],
   template: `
     @if (isSubmitting()) {
-    <app-editor-output-loading />
+    <app-editor-loading />
     } @else if (submissionResult(); as result) {
-    <app-editor-output-result [result]="result" />
+    <app-editor-result [result]="result" />
     } @else {
-    <app-editor-no-results />
+    <app-editor-no-result />
     }
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class EditorOutputResultsComponent {
+export class EditorResultsComponent {
   // Submission service.
   private readonly submissionService = inject(SubmissionService);
   // Whether the code is currently being submitted.
