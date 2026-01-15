@@ -28,6 +28,9 @@ Ensure code is complete!
 3. Functions:
     - Use "RO-RO" pattern (Receive Object, Return Object) for 3+ arguments.
     - Prefer Guard Clauses (Early return) over `else`.
-4. Formatting:
+4. Formatting & Documentation:
     - Use 1 blank line between methods/logical blocks.
-    - Do not create "walls of text".
+    - Do not create "walls of text", BUT...
+    - ALWAYS add a single-line comment above every function/method definition describing its intent.
+    - NEVER delete existing comments unless the related code is removed.
+    - Prioritize code clarity over extreme brevity.

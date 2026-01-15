@@ -43,6 +43,7 @@ export class EditorOutputTestsComponent {
   // Emits when the expected output changes.
   readonly expectedOutputChange = output<string>();
 
+  // Handles the expected output change.
   onExpectedOutputChange(value: string): void {
     this.expectedOutputChange.emit(value);
   }

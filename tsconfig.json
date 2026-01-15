@@ -18,6 +18,9 @@
       "@app/core/*": [
         "./src/app/core/*"
       ],
+      "@app/shared/*": [
+        "./src/app/shared/*"
+      ],
       "@components/*": [
         "./src/app/core/components/*"
       ],

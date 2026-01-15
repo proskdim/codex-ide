@@ -1,14 +1,15 @@
 import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
 import { SubmissionService } from '@app/core/services/submission.service';
 import { JUDGE0_STATUS } from '@app/core/types/judge0.types';
-import { LucideAngularModule, Clock, Cpu, CheckCircle } from 'lucide-angular';
+import { LucideAngularModule, Clock, Cpu } from 'lucide-angular';
+import { Base64DecodePipe } from '@app/shared/pipes/base64-decode.pipe';
 
 /**
  * Component for displaying the execution result in the terminal.
  */
 @Component({
   selector: 'app-editor-output-result',
-  imports: [LucideAngularModule],
+  imports: [LucideAngularModule, Base64DecodePipe],
   template: `
     @if (isSubmitting()) {
     <div class="flex flex-col items-center justify-center py-12 text-base-content/50">
@@ -48,14 +49,14 @@ import { LucideAngularModule, Clock, Cpu, CheckCircle } from 'lucide-angular';
         <div class="alert alert-error bg-error/5 border-error/20 p-4 text-sm rounded-lg">
           <pre
             class="whitespace-pre-wrap font-mono text-xs"
-          ><code>{{ decodeBase64(result.compile_output) }}</code></pre>
+          ><code>{{ result.compile_output | base64Decode }}</code></pre>
         </div>
       </div>
       } @if (result.message) {
       <div class="space-y-2">
         <p class="text-[10px] font-black uppercase tracking-wider opacity-40">System Message</p>
         <div class="alert alert-info bg-info/5 border-info/20 p-4 text-sm rounded-lg">
-          <span class="font-mono text-xs">{{ decodeBase64(result.message) }}</span>
+          <span class="font-mono text-xs">{{ result.message | base64Decode }}</span>
         </div>
       </div>
       } @if (result.stdout) {
@@ -66,7 +67,7 @@ import { LucideAngularModule, Clock, Cpu, CheckCircle } from 'lucide-angular';
         <div class="bg-primary/5 text-primary rounded-lg p-4 shadow-inner border border-primary/20">
           <pre
             class="font-mono text-xs leading-relaxed"
-          ><code>{{ decodeBase64(result.stdout) }}</code></pre>
+          ><code>{{ result.stdout | base64Decode }}</code></pre>
         </div>
       </div>
       } @if (result.stderr) {
@@ -77,7 +78,7 @@ import { LucideAngularModule, Clock, Cpu, CheckCircle } from 'lucide-angular';
         <div class="alert alert-neutral bg-base-300 border-base-300 p-4 text-sm rounded-lg">
           <pre
             class="text-error font-mono text-xs leading-relaxed"
-          ><code>{{ decodeBase64(result.stderr) }}</code></pre>
+          ><code>{{ result.stderr | base64Decode }}</code></pre>
         </div>
       </div>
       }
@@ -93,11 +94,13 @@ import { LucideAngularModule, Clock, Cpu, CheckCircle } from 'lucide-angular';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class EditorOutputResultComponent {
+  // Submission service.
   private readonly submissionService = inject(SubmissionService);
 
+  // Clock icon.
   readonly ClockIcon = Clock;
+  // CPU icon.
   readonly CpuIcon = Cpu;
-  readonly CheckCircleIcon = CheckCircle;
 
   // Whether the code is currently being submitted.
   readonly isSubmitting = this.submissionService.isSubmitting;
@@ -116,16 +119,6 @@ export class EditorOutputResultComponent {
         return 'badge-error';
       default:
         return 'badge-ghost';
-    }
-  }
-
-  // Decodes a base64 encoded string to a regular string.
-  decodeBase64(value: string | null): string | null {
-    if (!value) return value;
-    try {
-      return atob(value);
-    } catch {
-      return value;
     }
   }
 }
