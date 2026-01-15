@@ -17,19 +17,14 @@ export const StatusSchema = z.object({
 });
 
 // Schema for creating a code submission.
-export const SubmissionSchema = z.object({
+export const Judge0RequestSchema = z.object({
   source_code: z.string().min(1, 'Source code is required'),
   language_id: z.number().int().positive('Language ID must be a positive integer'),
   expected_output: z.string().optional(),
 });
 
-// Schema for create submission response.
-export const SubmissionTokenSchema = z.object({
-  token: z.string(),
-});
-
-// Schema for submission result.
-export const SubmissionResultSchema = z.object({
+// Schema for Judge0 response object.
+export const Judge0ResponseSchema = z.object({
   stdout: z.string().nullable(),
   time: z
     .union([z.string(), z.number()])
@@ -47,10 +42,7 @@ export const SubmissionResultSchema = z.object({
 });
 
 // Type for submission.
-export type Submission = z.infer<typeof SubmissionSchema>;
-
-// Type for submission token.
-export type SubmissionToken = z.infer<typeof SubmissionTokenSchema>;
+export type Judge0Request = z.infer<typeof Judge0RequestSchema>;
 
 // Type for submission result.
-export type SubmissionResult = z.infer<typeof SubmissionResultSchema>;
+export type Judge0Response = z.infer<typeof Judge0ResponseSchema>;

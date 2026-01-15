@@ -1,42 +1,9 @@
 import { HttpParams } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
-import {
-  catchError,
-  filter,
-  interval,
-  map,
-  Observable,
-  switchMap,
-  takeWhile,
-  throwError,
-  timeout,
-} from 'rxjs';
-import {
-  SubmissionSchema,
-  JUDGE0_STATUS,
-  SubmissionResult,
-  SubmissionResultSchema,
-  Submission,
-  SubmissionToken,
-  SubmissionTokenSchema,
-} from '@app/core/types/judge0.types';
+import { catchError, map, Observable, throwError, timeout } from 'rxjs';
+import { Judge0Response, Judge0Request } from '@app/core/types/judge0.types';
 import { Judge0ValidatorService } from './validator';
 import { Judge0ClientService } from './client';
-
-const submissionParams = new HttpParams({
-  fromObject: {
-    base64_encoded: 'true',
-    wait: 'false',
-    fields: '*',
-  },
-});
-
-const submissionResultParams = new HttpParams({
-  fromObject: {
-    base64_encoded: 'true',
-    fields: '*',
-  },
-});
 
 /**
  * Service for interacting with the Judge0 API via RapidAPI.
@@ -45,66 +12,60 @@ const submissionResultParams = new HttpParams({
   providedIn: 'root',
 })
 export class Judge0Service {
-  // Inject the Judge0 HTTP and validator services.
-  private readonly judge0Client = inject(Judge0ClientService);
-  // Inject the Judge0 validator service.
-  private readonly judge0Validator = inject(Judge0ValidatorService);
-  // Polling interval in milliseconds.
-  private readonly INTERVAL_MS = 2000;
-  // Timeout in milliseconds.
-  private readonly TIMEOUT_MS = 60000;
+  // The timeout for the submission in milliseconds.
+  private readonly EXECUTION_TIMEOUT_MS = 60000;
+  // The endpoint for the submissions.
+  private readonly SUBMISSIONS_ENDPOINT = '/submissions';
 
-  // Submits code and polls for the result until it's finished.
-  execute(data: Submission): Observable<SubmissionResult> {
-    const validatedData = this.judge0Validator.call(SubmissionSchema, data, 'CreateSubmission');
+  // The error messages.
+  private readonly ERRORS = {
+    TIMEOUT: 'Submission timed out',
+    EXECUTION_FAILED: (msg: string) => `Failed to execute code: ${msg}`,
+    UNKNOWN: 'Unknown error occurred',
+  };
 
-    const submissionData: Submission = {
-      ...validatedData,
-      source_code: btoa(validatedData.source_code),
-      expected_output: validatedData.expected_output ? btoa(validatedData.expected_output) : undefined,
-    };
+  // The Judge0 client service.
+  private readonly client = inject(Judge0ClientService);
+  // The Judge0 validator service.
+  private readonly validator = inject(Judge0ValidatorService);
 
-    return this.createSubmission(submissionData).pipe(
-      switchMap((response) => this.pollSubmission(response.token)),
+  // The base parameters for the submissions.
+  private readonly baseParams = new HttpParams({
+    fromObject: {
+      base64_encoded: 'true',
+      wait: 'true',
+      fields: '*',
+    },
+  });
+
+  // Executes the code and waits for the result.
+  execute(input: Judge0Request): Observable<Judge0Response> {
+    return this.submit(this.buildBody(input)).pipe(
       timeout({
-        each: this.TIMEOUT_MS,
-        with: () => throwError(() => new Error('Submission timed out')),
+        each: this.EXECUTION_TIMEOUT_MS,
+        with: () => throwError(() => new Error(this.ERRORS.TIMEOUT)),
       }),
       catchError((error) => {
-        const message = error instanceof Error ? error.message : 'Unknown error occurred';
-        return throwError(() => new Error(`Failed to execute code: ${message}`));
+        const message = error instanceof Error ? error.message : this.ERRORS.UNKNOWN;
+        return throwError(() => new Error(this.ERRORS.EXECUTION_FAILED(message)));
       })
     );
   }
 
-  // Creates a new code submission.
-  createSubmission(data: Submission): Observable<SubmissionToken> {
-    return this.judge0Client
-      .post<SubmissionToken>('/submissions', data, submissionParams)
-      .pipe(
-        map((response) =>
-          this.judge0Validator.call(SubmissionTokenSchema, response, 'CreateSubmission')
-        )
-      );
+  // Submits the code to the Judge0 API and waits for the result.
+  private submit(body: Judge0Request): Observable<Judge0Response> {
+    return this.client
+      .post<Judge0Response>(this.SUBMISSIONS_ENDPOINT, body, this.baseParams)
+      .pipe(map((response) => this.validator.validateResponse(response)));
   }
 
-  // Retrieves the status and result of a submission.
-  getSubmission(submissionId: string): Observable<SubmissionResult> {
-    return this.judge0Client
-      .get<SubmissionResult>(`/submissions/${submissionId}`, submissionResultParams)
-      .pipe(
-        map((response) =>
-          this.judge0Validator.call(SubmissionResultSchema, response, 'SubmissionResult')
-        )
-      );
-  }
-
-  // Polls the submission status until it reaches a terminal state.
-  private pollSubmission(token: string): Observable<SubmissionResult> {
-    return interval(this.INTERVAL_MS).pipe(
-      switchMap(() => this.getSubmission(token)),
-      takeWhile((result) => result.status.id <= JUDGE0_STATUS.PROCESSING, true),
-      filter((result) => result.status.id > JUDGE0_STATUS.PROCESSING)
-    );
+  // Builds the submission body and handles encoding.
+  private buildBody(input: Judge0Request): Judge0Request {
+    const data = this.validator.validateRequest(input);
+    return {
+      ...data,
+      source_code: btoa(data.source_code ?? ''),
+      expected_output: btoa(data.expected_output ?? ''),
+    };
   }
 }

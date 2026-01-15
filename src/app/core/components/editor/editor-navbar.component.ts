@@ -53,7 +53,9 @@ import { LucideAngularModule, X, Play } from 'lucide-angular';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class EditorNavbarComponent {
+  // X Icon
   readonly XIcon = X;
+  // Play Icon
   readonly PlayIcon = Play;
   // Whether the code is currently being submitted.
   readonly isSubmitting = input<boolean>(false);
@@ -62,11 +64,11 @@ export class EditorNavbarComponent {
   readonly closeEditor = output<void>();
 
   // Emits when the submit button is clicked.
-  readonly submitCode = output<void>();
+  readonly runCode = output<void>();
 
   // Handles the submit button click event.
   onSubmitCode(): void {
-    this.submitCode.emit();
+    this.runCode.emit();
   }
 
   // Handles the close button click event.

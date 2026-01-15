@@ -13,7 +13,7 @@ import { EditorTaskDescriptionComponent } from '@app/core/components/editor/edit
 import { EditorCodeComponent } from '@editor/editor-code.component';
 import { EditorOutputPanelComponent } from '@app/core/components/editor/editor-output-panel/editor-output-panel.component';
 import { SubmissionService } from '@app/core/services/submission.service';
-import { Submission } from '@app/core/types/judge0.types';
+import { Judge0Request } from '@app/core/types/judge0.types';
 const DEFAULT_MAIN_SIZES = [45, 55] as const;
 const DEFAULT_EDITOR_SIZES = [60, 40] as const;
 const COLLAPSED_MAIN_SIZES = [4, 96] as const;
@@ -137,25 +137,32 @@ export class EditorLayoutComponent {
     },
   };
 
-  // Submits the current code to Judge0 for execution.
-  submitCode(): void {
+  // Emits when the run code button is clicked.
+  onRunCode(): void {
     if (this.isSubmitting()) {
       return;
     }
 
+    this.prepareUiForRun();
+    this.submissionService.execute(this.createSubmissionData());
+  }
+
+  // Prepares the UI for the run.
+  private prepareUiForRun(): void {
     this.terminalTab.set('result');
 
     if (this.isTerminalCollapsed()) {
       this.toggleTerminal();
     }
+  }
 
-    const submissionData: Submission = {
+  // Creates the submission data.
+  private createSubmissionData(): Judge0Request {
+    return {
       language_id: this.languageId(),
       source_code: this.code(),
       expected_output: this.expectedOutput(),
     };
-
-    this.submissionService.execute(submissionData);
   }
 
   // Emits when the editor should be closed.
