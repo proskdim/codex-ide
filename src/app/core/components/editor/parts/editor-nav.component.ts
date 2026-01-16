@@ -23,29 +23,24 @@ import { LucideAngularModule, X, Play } from 'lucide-angular';
       </div>
 
       <div class="navbar-center">
-        <span
-          id="editor-title"
-          class="text-xs font-black tracking-[0.3em] opacity-20 uppercase"
+        <span id="editor-title" class="text-xs font-black tracking-[0.3em] opacity-20 uppercase"
           >Codex IDE</span
         >
       </div>
 
       <div class="navbar-end gap-2">
-        <div class="badge badge-ghost badge-sm font-mono opacity-50">
-          TypeScript
-        </div>
-        
+        <div class="badge badge-ghost badge-sm font-mono opacity-50">TypeScript</div>
+
         <button
           (click)="onSubmitCode()"
           [disabled]="isSubmitting()"
           class="btn btn-primary btn-sm shadow-lg px-6 gap-2"
         >
           @if (isSubmitting()) {
-            <span class="loading loading-spinner loading-xs"></span>
+          <span class="loading loading-spinner loading-xs"></span>
           } @else {
-            <lucide-icon [name]="PlayIcon" class="h-3.5 w-3.5"></lucide-icon>
-          }
-          Run Code
+          <lucide-icon [name]="PlayIcon" class="h-3.5 w-3.5"></lucide-icon>
+          } Run Code
         </button>
       </div>
     </nav>
