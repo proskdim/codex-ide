@@ -36,6 +36,8 @@ export class App {
   
   console.log(hello());`;
 
+  readonly editorLanguage = 'typescript';
+
   // Toggle editor visibility.
   onToggleEditor(): void {
     this.isEditorVisible.update((visible) => !visible);

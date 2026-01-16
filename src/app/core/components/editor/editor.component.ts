@@ -11,7 +11,7 @@ import {
 import { AngularSplitModule } from 'angular-split';
 import { EditorNavComponent } from '@editor/parts/editor-nav.component';
 import { EditorDescComponent } from '@editor/parts/editor-desc.component';
-import { EditorCodeComponent } from '@app/core/components/editor/parts/code/editor-code.component';
+import { EditorCodeComponent } from '@app/core/components/editor/parts/editor-code.component';
 import { EditorPanelComponent } from '@editor/parts/shell/editor-panel.component';
 import { SubmissionService } from '@services/submission.service';
 import { Judge0Request } from '@app/core/types/judge0.types';
@@ -80,7 +80,7 @@ interface SplitDragEvent {
                   <app-editor-code
                     [(code)]="code"
                     [isCollapsed]="isEditorCollapsed()"
-                    [fileName]="'solution.ts'"
+                    [language]="language()"
                     (toggleCollapse)="toggleEditor()"
                   />
                 </as-split-area>
@@ -174,6 +174,8 @@ export class EditorComponent {
   readonly description = input.required<string>();
   // Code content in the editor.
   readonly code = model.required<string>();
+  // Language of the editor.
+  readonly language = input.required<string>();
   // Judge0 language ID (TypeScript).
   readonly languageId = signal<number>(74);
   // Split sizes (percentages).

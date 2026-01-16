@@ -2,6 +2,7 @@ import { isPlatformBrowser } from '@angular/common';
 import {
   ChangeDetectionStrategy,
   Component,
+  computed,
   inject,
   input,
   model,
@@ -29,9 +30,6 @@ import { MonacoEditorModule } from 'ngx-monaco-editor-v2';
       >
         <div class="flex items-center gap-3">
           <lucide-icon [name]="CodeIcon" class="h-4 w-4 opacity-40"></lucide-icon>
-          <span class="flex items-center gap-2 py-1 tracking-wide opacity-50 font-mono text-xs">
-            {{ fileName() }}
-          </span>
         </div>
         <button
           (click)="onToggleCollapse()"
@@ -48,7 +46,7 @@ import { MonacoEditorModule } from 'ngx-monaco-editor-v2';
       <div class="min-h-0 flex-1">
         @if (isBrowser()) {
         <ngx-monaco-editor
-          [options]="options"
+          [options]="options()"
           [(ngModel)]="code"
           style="height: 100%;"
         ></ngx-monaco-editor>
@@ -67,16 +65,16 @@ export class EditorCodeComponent {
   readonly ChevronUpIcon = ChevronUp;
   // Code content in the editor.
   readonly code = model.required<string>();
-  // File name to display.
-  readonly fileName = input<string>('solution.ts');
+  // Language of the editor.
+  readonly language = input<string>('');
   // Whether the editor section is collapsed.
   readonly isCollapsed = input.required<boolean>();
   // Emits when the collapse toggle is clicked.
   readonly toggleCollapse = output<void>();
 
   // Monaco editor configuration options.
-  readonly options = {
-    language: 'typescript',
+  readonly options = computed(() => ({
+    language: this.language(),
     tabSize: 2,
     minimap: { enabled: false },
     fontSize: 14,
@@ -84,7 +82,7 @@ export class EditorCodeComponent {
     fontFamily: 'JetBrains Mono, monospace',
     padding: { top: 20 },
     fixedOverflowWidgets: true,
-  };
+  }));
 
   // Handles the collapse toggle click event.
   onToggleCollapse(): void {

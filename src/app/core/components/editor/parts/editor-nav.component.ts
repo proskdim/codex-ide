@@ -29,8 +29,6 @@ import { LucideAngularModule, X, Play } from 'lucide-angular';
       </div>
 
       <div class="navbar-end gap-2">
-        <div class="badge badge-ghost badge-sm font-mono opacity-50">TypeScript</div>
-
         <button
           (click)="onSubmitCode()"
           [disabled]="isSubmitting()"
