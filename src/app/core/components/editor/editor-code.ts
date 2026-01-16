@@ -55,7 +55,7 @@ import { MonacoEditorModule } from 'ngx-monaco-editor-v2';
     </section>
   `,
 })
-export class EditorCodeComponent {
+export class EditorCode {
   readonly isBrowser = signal(isPlatformBrowser(inject(PLATFORM_ID)));
   // Code icon.
   readonly CodeIcon = Code;

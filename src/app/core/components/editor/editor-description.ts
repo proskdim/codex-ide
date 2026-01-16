@@ -12,7 +12,7 @@ import { LucideAngularModule, Info, ArrowRight, ArrowLeft } from 'lucide-angular
  * Displays markdown content and handles collapse/expand.
  */
 @Component({
-  selector: 'app-editor-desc',
+  selector: 'app-editor-description',
   imports: [MarkdownModule, LucideAngularModule],
   changeDetection: ChangeDetectionStrategy.OnPush,
   styles: `
@@ -77,7 +77,7 @@ import { LucideAngularModule, Info, ArrowRight, ArrowLeft } from 'lucide-angular
     </section>
   `,
 })
-export class EditorDescComponent {
+export class EditorDescription {
   // Info icon.
   readonly InfoIcon = Info;
   // Arrow right icon.

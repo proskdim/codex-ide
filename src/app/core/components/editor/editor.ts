@@ -9,10 +9,10 @@ import {
   signal,
 } from '@angular/core';
 import { AngularSplitModule } from 'angular-split';
-import { EditorNavComponent } from '@editor/parts/editor-nav.component';
-import { EditorDescComponent } from '@editor/parts/editor-desc.component';
-import { EditorCodeComponent } from '@app/core/components/editor/parts/editor-code.component';
-import { EditorPanelComponent } from '@editor/parts/shell/editor-panel.component';
+import { EditorHeader } from '@app/core/components/editor/editor-header';
+import { EditorDescription } from '@app/core/components/editor/editor-description';
+import { EditorCode } from '@app/core/components/editor/editor-code';
+import { Panel } from '@app/core/components/editor/panel';
 import { SubmissionService } from '@services/submission.service';
 import { Judge0Request } from '@app/core/types/judge0.types';
 
@@ -34,10 +34,10 @@ interface SplitDragEvent {
   selector: 'app-editor',
   imports: [
     AngularSplitModule,
-    EditorNavComponent,
-    EditorDescComponent,
-    EditorCodeComponent,
-    EditorPanelComponent,
+    EditorHeader,
+    EditorDescription,
+    EditorCode,
+    Panel,
   ],
   template: `
     <div class="modal modal-open backdrop-blur-sm animate-in fade-in duration-300">
@@ -45,7 +45,7 @@ interface SplitDragEvent {
         class="modal-box relative flex h-full w-full max-w-[1500px] flex-col border border-base-300 bg-base-200 p-0 shadow-2xl animate-in zoom-in-95 duration-300 md:h-[95vh] md:w-[98vw] md:rounded-xl"
       >
         <!-- Header Navbar -->
-        <app-editor-nav
+        <app-editor-header
           [isSubmitting]="isSubmitting()"
           (closeEditor)="onEditorClosed()"
           (runCode)="onRunCode()"
@@ -61,7 +61,7 @@ interface SplitDragEvent {
           >
             <!-- Description Section -->
             <as-split-area [size]="mainSplitSizes()[0]" [minSize]="4">
-              <app-editor-desc
+              <app-editor-description
                 [content]="description()"
                 [isCollapsed]="isDescriptionCollapsed()"
                 (toggleCollapse)="toggleDescription()"
@@ -87,7 +87,7 @@ interface SplitDragEvent {
 
                 <!-- Terminal / Test cases Section -->
                 <as-split-area [size]="rightSplitSizes()[1]" [minSize]="6">
-                  <app-editor-panel
+                  <app-panel
                     [activeTab]="terminalTab()"
                     (activeTabChange)="onActiveTabChange($event)"
                     [(expectedOutput)]="expectedOutput"
@@ -161,7 +161,7 @@ as-split {
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class EditorComponent {
+export class Editor {
   // Submission service.
   private readonly submissionService = inject(SubmissionService);
   // Submission state.

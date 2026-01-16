@@ -174,7 +174,7 @@ export class EditorResultComponent {
  * Main container component for the output panel.
  */
 @Component({
-  selector: 'app-editor-results',
+  selector: 'app-panel-output',
   imports: [EditorLoadingComponent, EditorNoResultComponent, EditorResultComponent],
   template: `
     @if (isSubmitting()) {
@@ -187,7 +187,7 @@ export class EditorResultComponent {
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class EditorResultsComponent {
+export class PanelOutput {
   // Submission service.
   private readonly submissionService = inject(SubmissionService);
   // Whether the code is currently being submitted.
