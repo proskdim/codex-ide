@@ -54,8 +54,7 @@
               <app-editor-panel
                 [activeTab]="terminalTab()"
                 (activeTabChange)="onActiveTabChange($event)"
-                [expectedOutput]="expectedOutput()"
-                (expectedOutputChange)="onExpectedOutputChange($event)"
+                [(expectedOutput)]="expectedOutput"
                 [isCollapsed]="isTerminalCollapsed()"
                 (toggleCollapse)="toggleTerminal()"
               />

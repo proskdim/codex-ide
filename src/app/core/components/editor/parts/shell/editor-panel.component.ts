@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, input, output } from '@angular/core';
+import { ChangeDetectionStrategy, Component, input, model, output } from '@angular/core';
 import { EditorOutputComponent } from './editor-output.component';
 import { EditorResultsComponent } from './editor-result.component';
 import {
@@ -68,10 +68,7 @@ import {
       @if (!isCollapsed()) {
       <div id="terminal-panel" class="card-body overflow-auto p-6" role="tabpanel">
         @if (activeTab() === 'test-cases') {
-        <app-editor-output
-          [expectedOutput]="expectedOutput()"
-          (expectedOutputChange)="onExpectedOutputChange($event)"
-        />
+        <app-editor-output [(expectedOutput)]="expectedOutput" />
         } @else {
         <app-editor-results />
         }
@@ -93,9 +90,7 @@ export class EditorPanelComponent {
   // Whether the terminal section is collapsed.
   readonly isCollapsed = input.required<boolean>();
   // The expected output for the submission.
-  readonly expectedOutput = input<string>('');
-  // Emits when the expected output changes.
-  readonly expectedOutputChange = output<string>();
+  readonly expectedOutput = model.required<string>();
   // The currently active tab.
   readonly activeTab = input<'test-cases' | 'result'>('test-cases');
   // Emits when the active tab changes.
@@ -111,10 +106,5 @@ export class EditorPanelComponent {
   // Handles the active tab change event.
   onActiveTabChange(event: 'test-cases' | 'result'): void {
     this.activeTabChange.emit(event);
-  }
-
-  // Handles the expected output change event.
-  onExpectedOutputChange(event: string): void {
-    this.expectedOutputChange.emit(event);
   }
 }

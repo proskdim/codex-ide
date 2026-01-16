@@ -14,10 +14,30 @@ export class App {
 
   readonly isEditorVisible = signal(true);
 
-  /**
-   * Toggles the visibility of the editor.
-   */
-  executeToggleEditor(): void {
+  readonly editorExpectedOutput = 'Hello, World!';
+
+  readonly editorDescription = `
+  # Hello World
+  ### Function declaration
+  \`\`\`typescript
+  function hello(): string {
+    return "Hello, World!";
+  }
+  \`\`\`
+  ### Function call
+  \`\`\`typescript
+  console.log(hello());
+  \`\`\`
+  `;
+
+  readonly editorCode = `function hello(): string {
+    return "Hello, World!";
+  }
+  
+  console.log(hello());`;
+
+  // Toggle editor visibility.
+  onToggleEditor(): void {
     this.isEditorVisible.update((visible) => !visible);
   }
 }

@@ -3,6 +3,8 @@ import {
   Component,
   computed,
   inject,
+  input,
+  model,
   output,
   signal,
   viewChild,
@@ -23,37 +25,6 @@ const COLLAPSED_TERMINAL_SIZES = [94, 6] as const;
 interface SplitDragEvent {
   sizes: (number | '*')[];
 }
-
-const DEFAULT_DESCRIPTION = `
-# Hello World
-
-
-### Function declaration
-\`\`\`typescript
-function hello(): string {
-  return "Hello, World!";
-}
-\`\`\`
-
-### Function call
-\`\`\`typescript
-console.log(hello());
-\`\`\`
-
-### Expected output
-Write a function that returns "Hello, World!".
-
-### Example
-**Output:** \`"Hello, World!"\`
-`;
-
-const DEFAULT_CODE = `function hello(): string {
-  return "Hello, World!";
-}
-
-console.log(hello());`;
-
-const DEFAULT_EXPECTED_OUTPUT = 'Hello, World!';
 
 /**
  * EditorLayoutComponent provides a split-pane interface with a markdown description,
@@ -82,9 +53,9 @@ export class EditorComponent {
   // Emits when the editor should be closed.
   readonly editorClosed = output<void>();
   // Markdown big description content.
-  readonly description = signal<string>(DEFAULT_DESCRIPTION);
+  readonly description = input.required<string>();
   // Code content in the editor.
-  readonly code = signal<string>(DEFAULT_CODE);
+  readonly code = model.required<string>();
   // Judge0 language ID (TypeScript).
   readonly languageId = signal<number>(74);
   // Split sizes (percentages).
@@ -94,7 +65,7 @@ export class EditorComponent {
   // The currently active tab in the terminal.
   readonly terminalTab = signal<'test-cases' | 'result'>('test-cases');
   // The expected output for the submission.
-  readonly expectedOutput = signal<string>(DEFAULT_EXPECTED_OUTPUT);
+  readonly expectedOutput = model.required<string>();
   // State for collapsing sections, derived from split sizes.
   readonly isDescriptionCollapsed = computed(
     () => this.mainSplitSizes()[0] <= COLLAPSED_MAIN_SIZES[0] + 0.5
@@ -163,16 +134,6 @@ export class EditorComponent {
   // Emits when the active tab changes.
   onActiveTabChange(tab: 'test-cases' | 'result'): void {
     this.terminalTab.set(tab);
-  }
-
-  // Emits when the expected output changes.
-  onExpectedOutputChange(output: string): void {
-    this.expectedOutput.set(output);
-  }
-
-  // Emits when the code changes.
-  onCodeChange(code: string): void {
-    this.code.set(code);
   }
 
   // Handles the split drag event.

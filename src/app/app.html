@@ -1,9 +1,10 @@
-<h1>Codex IDE</h1>
-
-<button (click)="executeToggleEditor()">Open editor</button>
+<button (click)="onToggleEditor()">Open editor</button>
 
 @if (isEditorVisible()) {
   <app-editor
-  (editorClosed)="executeToggleEditor()"
+    [description]="editorDescription"
+    [code]="editorCode"
+    [expectedOutput]="editorExpectedOutput"
+    (editorClosed)="onToggleEditor()"
   />
 }

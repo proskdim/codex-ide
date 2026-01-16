@@ -68,7 +68,7 @@ export class EditorNoResultComponent {}
     } @case (JUDGE0_STATUS.WRONG_ANSWER) {
     <div class="space-y-2">
       <p class="text-[10px] font-black uppercase tracking-wider opacity-40 text-error">
-        Standard Error
+        Wrong Answer
       </p>
       <div class="alert alert-neutral bg-base-300 border-base-300 p-4 text-sm rounded-lg">
         <pre

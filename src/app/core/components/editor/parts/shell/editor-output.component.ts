@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, input, output } from '@angular/core';
+import { ChangeDetectionStrategy, Component, model } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { LucideAngularModule, Info } from 'lucide-angular';
 
@@ -24,7 +24,7 @@ import { LucideAngularModule, Info } from 'lucide-angular';
         class="input input-primary input-sm w-full font-mono text-sm shadow-lg"
         placeholder="Enter expected output to compare..."
         [ngModel]="expectedOutput()"
-        (ngModelChange)="onExpectedOutputChange($event)"
+        (ngModelChange)="onModelChange($event)"
       />
       <div class="text-[10px] opacity-40 italic">
         * This will be compared against the actual output of your code.
@@ -37,12 +37,10 @@ export class EditorOutputComponent {
   // Info icon.
   readonly InfoIcon = Info;
   // The expected output for the submission.
-  readonly expectedOutput = input<string>('');
-  // Emits when the expected output changes.
-  readonly expectedOutputChange = output<string>();
+  readonly expectedOutput = model.required<string>();
 
-  // Handles the expected output change.
-  onExpectedOutputChange(value: string): void {
-    this.expectedOutputChange.emit(value);
+  // Handles the model change event.
+  onModelChange(event: string): void {
+    this.expectedOutput.set(event);
   }
 }
