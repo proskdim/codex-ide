@@ -12,7 +12,7 @@ import {
 import { AngularSplitModule } from 'angular-split';
 import { EditorNavComponent } from '@editor/parts/editor-nav.component';
 import { EditorDescComponent } from '@editor/parts/editor-desc.component';
-import { EditorCodeComponent } from '@editor/parts/editor-code.component';
+import { EditorCodeComponent } from '@app/core/components/editor/parts/code/editor-code.component';
 import { EditorPanelComponent } from '@editor/parts/shell/editor-panel.component';
 import { SubmissionService } from '@services/submission.service';
 import { Judge0Request } from '@app/core/types/judge0.types';
@@ -80,24 +80,6 @@ export class EditorComponent {
   // Reference to the code editor component for layout updates.
   private readonly codeEditor = viewChild(EditorCodeComponent);
 
-  // Monaco editor configuration options.
-  // fixedOverflowWidgets help to prevent the hover widgets from being clipped.
-  readonly editorOptions = {
-    language: 'typescript',
-    tabSize: 2,
-    minimap: { enabled: false },
-    fontSize: 14,
-    automaticLayout: true,
-    fontFamily: 'JetBrains Mono, monospace',
-    padding: { top: 20 },
-    fixedOverflowWidgets: true,
-    hover: {
-      delay: 150,
-      sticky: true,
-      above: true,
-    },
-  };
-
   // Emits when the run code button is clicked.
   onRunCode(): void {
     if (this.isSubmitting()) {
@@ -142,7 +124,6 @@ export class EditorComponent {
     const numericSizes = sizes.map((s) => (typeof s === 'number' ? s : 0));
     const target = type === 'main' ? this.mainSplitSizes : this.rightSplitSizes;
     target.set(numericSizes);
-    this.codeEditor()?.layout();
   }
 
   // Toggles the description section visibility.
@@ -150,7 +131,6 @@ export class EditorComponent {
     this.mainSplitSizes.set(
       this.isDescriptionCollapsed() ? [...DEFAULT_MAIN_SIZES] : [...COLLAPSED_MAIN_SIZES]
     );
-    this.codeEditor()?.layout();
   }
 
   // Toggles the editor section visibility.
@@ -158,7 +138,6 @@ export class EditorComponent {
     this.rightSplitSizes.set(
       this.isEditorCollapsed() ? [...DEFAULT_EDITOR_SIZES] : [...COLLAPSED_EDITOR_SIZES]
     );
-    this.codeEditor()?.layout();
   }
 
   // Toggles the terminal section visibility.
@@ -166,6 +145,5 @@ export class EditorComponent {
     this.rightSplitSizes.set(
       this.isTerminalCollapsed() ? [...DEFAULT_EDITOR_SIZES] : [...COLLAPSED_TERMINAL_SIZES]
     );
-    this.codeEditor()?.layout();
   }
 }

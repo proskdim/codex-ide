@@ -3,13 +3,9 @@ import {
   Component,
   input,
   output,
-  inject,
-  PLATFORM_ID,
 } from '@angular/core';
-import { isPlatformBrowser } from '@angular/common';
 import { MarkdownModule } from 'ngx-markdown';
 import { LucideAngularModule, Info, ArrowRight, ArrowLeft } from 'lucide-angular';
-import ClipboardJS from 'clipboard';
 
 /**
  * Description component for the Codex Editor.
@@ -88,14 +84,6 @@ export class EditorDescComponent {
   readonly ArrowRightIcon = ArrowRight;
   // Arrow left icon.
   readonly ArrowLeftIcon = ArrowLeft;
-
-  // hack
-  constructor() {
-    if (isPlatformBrowser(inject(PLATFORM_ID))) {
-      (window as unknown as { ClipboardJS: typeof ClipboardJS }).ClipboardJS = ClipboardJS;
-    }
-  }
-
   // Markdown content to display.
   readonly content = input.required<string>();
   // Whether the description section is collapsed.
